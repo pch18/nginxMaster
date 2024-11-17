@@ -1,0 +1,23 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+body,
+html,
+#root {
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+// feat: 暗黑模式默认背景色
+body {
+  background-color: var(--color-bg-1);
+  color: var(--color-text-1);
+}
+
+// fix: tailwind会给svg设置为block, 导致Arco.Form.Item.Label前面的必填星号显示错乱
+svg {
+  display: unset;
+  vertical-align: unset;
+}
