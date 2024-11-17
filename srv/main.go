@@ -2,18 +2,37 @@ package main
 
 import (
 	"nginx_master/ctl"
+	"nginx_master/pkg"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	router := gin.Default()
+	router.GET("/*path", func(c *gin.Context) {
+		path := pkg.StaticDir + c.Param("path")
+		_, err := os.Stat(path)
+		if os.IsNotExist(err) {
+			c.File(pkg.StaticDir + "/index.html")
+		} else {
+			c.File(path)
+		}
+	})
 
 	apiRouter := router.Group("/api/v1/")
-	apiRouter.POST("/list_site_list", ctl.ListSiteList)
-	apiRouter.POST("/verify_site", ctl.VerifySite)
+
+	apiRouter.Use(pkg.BasicAuthMiddleware())
+	apiRouter.POST("/list_site", ctl.ListSite)
 	apiRouter.POST("/save_site", ctl.SaveSite)
-	apiRouter.POST("/set_pass", ctl.SetPass)
+	apiRouter.POST("/verify_site", ctl.VerifySite)
+
+	apiRouter.POST("/list_cert", ctl.ListCert)
+	apiRouter.POST("/save_cert", ctl.SaveCert)
+	apiRouter.POST("/del_cert", ctl.DelCert)
+
+	apiRouter.POST("/set_auth", ctl.SetAuth)
+	apiRouter.POST("/logout", ctl.Logout)
 
 	// 启动 HTTP 服务，监听在 8080 端口
 	router.Run(":9999")

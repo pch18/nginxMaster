@@ -3,8 +3,8 @@ import {
   LocationMode,
   LocationRedirectCode,
   type ServerConfig,
-  type SslConfig,
-  SslType,
+  type CertConfig,
+  CertType,
 } from "./interface";
 
 export const newServerConfig = (): ServerConfig => {
@@ -24,6 +24,8 @@ export const newServerConfig = (): ServerConfig => {
     sslEn: false,
     sslPorts: [443],
     sslCertId: "",
+    sslCertPem: "",
+    sslCertKey: "",
     sslHttp2En: true,
     sslForceEn: false,
 
@@ -57,13 +59,16 @@ export const newLocationConfig = (): LocationConfig => {
   };
 };
 
-export const newSslConfig = (): SslConfig => {
+export const newCertConfig = (): CertConfig => {
   return {
     id: makeId(),
-    type: SslType.Custom,
+    type: CertType.Custom,
     name: "",
-    issuedAt: 0,
-    expiredAt: 0,
+
+    domain: "",
+    issuer: "",
+    effectAt: -1,
+    expiredAt: -1,
 
     pemRaw: "",
     keyRaw: "",

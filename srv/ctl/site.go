@@ -7,10 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ListSiteList(c *gin.Context) {
-	list, err := pkg.ListServerConfigs()
+func ListSite(c *gin.Context) {
+	list, err := pkg.ListServer()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"err": "ListServerConfigs Failed"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"err": "ListServerConfigs Failed",
+		})
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -21,7 +23,9 @@ func ListSiteList(c *gin.Context) {
 func VerifySite(c *gin.Context) {
 	var requestBody map[string]interface{}
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"err": "Invalid JSON"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "Invalid JSON",
+		})
 		return
 	}
 
@@ -30,13 +34,21 @@ func VerifySite(c *gin.Context) {
 
 	nginxConfig, ok = requestBody["nginxConfig"].(string)
 	if !ok {
-		c.JSON(http.StatusBadRequest, gin.H{"err": "Invalid nginxConfig"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "Invalid nginxConfig",
+		})
 		return
 	}
 
 	output, err := pkg.NginxVerify(nginxConfig)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"err":    "NginxVerify Failed",
+			"output": output,
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
-		"err":    err,
 		"output": output,
 	})
 }
@@ -44,7 +56,9 @@ func VerifySite(c *gin.Context) {
 func SaveSite(c *gin.Context) {
 	var requestBody map[string]interface{}
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"err": "Invalid JSON"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "Invalid JSON",
+		})
 		return
 	}
 
@@ -54,27 +68,37 @@ func SaveSite(c *gin.Context) {
 
 	id, ok = requestBody["id"].(string)
 	if !ok || !pkg.IsValidId(id) {
-		c.JSON(http.StatusBadRequest, gin.H{"err": "Invalid id"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "Invalid id",
+		})
 		return
 	}
 	serverConfig = requestBody["serverConfig"]
 	nginxConfig, ok = requestBody["nginxConfig"].(string)
 	if !ok {
-		c.JSON(http.StatusBadRequest, gin.H{"err": "Invalid nginxConfig"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "Invalid nginxConfig",
+		})
 		return
 	}
-	// output, err := pkg.NginxVerify(nginxConfig)
-	// if err != nil {
-	// 	c.JSON(http.StatusOK, gin.H{
-	// 		"err":    err,
-	// 		"output": output,
-	// 	})
-	// 	return
-	// }
+	output, err := pkg.NginxVerify(nginxConfig)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"err":    "NginxVerify Failed",
+			"output": output,
+		})
+		return
+	}
 
-	output, err := pkg.UpdateServer(id, serverConfig, nginxConfig)
+	output, err = pkg.SaveServer(id, serverConfig, nginxConfig)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"err":    "UpdateServer Failed",
+			"output": output,
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
-		"err":    err,
 		"output": output,
 	})
 }

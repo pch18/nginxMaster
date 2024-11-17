@@ -1,4 +1,4 @@
-import { useCreation } from "ahooks";
+import { useMemo } from "react";
 
 export type ConstOptionMap<
   K extends PropertyKey,
@@ -53,7 +53,7 @@ export const useConstOption = <
   c: ConstOptionMap<K, T>,
   filter?: (obj: ConstOption<K, T>) => boolean
 ): Array<ConstOption<K, T>> =>
-  useCreation(() => {
+  useMemo(() => {
     const res = genConstOption(c, filter);
     return res;
   }, []);

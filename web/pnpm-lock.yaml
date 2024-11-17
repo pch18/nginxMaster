@@ -23,6 +23,9 @@ dependencies:
   hox:
     specifier: ^2.1.0
     version: 2.1.0(react@18.2.0)
+  jsrsasign:
+    specifier: ^11.1.0
+    version: 11.1.0
   lodash-es:
     specifier: ^4.17.21
     version: 4.17.21
@@ -2654,6 +2657,10 @@ packages:
     optionalDependencies:
       graceful-fs: 4.2.11
     dev: true
+
+  /jsrsasign@11.1.0:
+    resolution: {integrity: sha512-Ov74K9GihaK9/9WncTe1mPmvrO7Py665TUfUKvraXBpu+xcTWitrtuOwcjf4KMU9maPaYn0OuaWy0HOzy/GBXg==}
+    dev: false
 
   /jsx-ast-utils@3.3.5:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}

@@ -1,10 +1,10 @@
 import { Button, Table } from "@arco-design/web-react";
-import { openSiteModal } from "./openSiteModal";
 import { useColumns } from "./useColumns";
-import { useSiteList } from "@/common/useList";
+import { openCertModal } from "./openCertModal";
+import { useCertList } from "@/common/useList";
 
 export default function () {
-  const { sortedList, loading, error, mutate } = useSiteList();
+  const { sortedList, loading, error, mutate } = useCertList();
 
   const columns = useColumns(mutate);
 
@@ -13,13 +13,13 @@ export default function () {
       <div className="mb-3">
         <Button
           onClick={async () => {
-            const { serverConfig } = await openSiteModal({});
-            if (serverConfig) {
-              mutate((s) => [...(s ?? []), serverConfig]);
+            const { certConfig } = await openCertModal({});
+            if (certConfig) {
+              mutate((s) => [...(s ?? []), certConfig]);
             }
           }}
         >
-          新建站点
+          新建证书
         </Button>
       </div>
 

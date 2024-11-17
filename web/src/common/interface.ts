@@ -26,6 +26,10 @@ export interface ServerConfig {
   sslPorts: number[];
   /** 使用哪个证书 */
   sslCertId: string;
+  /** 证书 Pem Path */
+  sslCertPem: string;
+  /** 证书 Key Path */
+  sslCertKey: string;
   /** 开启 http2 */
   sslHttp2En: boolean;
   /** 开启 http 跳转 https */
@@ -79,11 +83,19 @@ export enum LocationMode {
   Custom = "custom",
 }
 
-export interface SslConfig {
+export interface CertConfig {
   id: string;
-  type: SslType;
+  type: CertType;
+
+  /** 自定义的名称 */
   name: string;
-  issuedAt: number;
+  /** 适用域名 */
+  domain: string;
+  /** 颁发者 */
+  issuer: string;
+  /** 生效时间 */
+  effectAt: number;
+  /** 过期时间 */
   expiredAt: number;
 
   pemRaw: string;
@@ -92,6 +104,6 @@ export interface SslConfig {
   keyPath: string;
 }
 
-export enum SslType {
+export enum CertType {
   Custom = "custom",
 }

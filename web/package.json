@@ -20,7 +20,8 @@
     "react-is": "^18.2.0",
     "react-router-dom": "^6.11.2",
     "styled-components": "^5.3.11",
-    "clsx": "^2.1.1"
+    "clsx": "^2.1.1",
+    "jsrsasign":"^11.1.0"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.7",

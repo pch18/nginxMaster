@@ -1,9 +1,14 @@
-import { type ServerConfig } from "@/common/interface";
+import { type CertConfig, type ServerConfig } from "@/common/interface";
 
 const baseUrl = "/api/v1";
 
-const customFetch = async <T>(url: string, param?: any) => {
+const customFetch = async <T>(
+  url: string,
+  param?: any,
+  other?: RequestInit
+) => {
   const res = await fetch(url, {
+    ...other,
     method: "POST",
     body: JSON.stringify(param),
   });
@@ -14,14 +19,12 @@ const customFetch = async <T>(url: string, param?: any) => {
 };
 
 export const request = {
-  ListSiteList: async () => {
-    return await customFetch<{ list: ServerConfig[] }>(
-      `${baseUrl}/list_site_list`
-    );
+  ListSite: async () => {
+    return await customFetch<{ list: ServerConfig[] }>(`${baseUrl}/list_site`);
   },
 
   VerifySite: async (nginxConfig: string) => {
-    return await customFetch<{ err: string; output?: string }>(
+    return await customFetch<{ err?: string; output: string }>(
       `${baseUrl}/verify_site`,
       { nginxConfig }
     );
@@ -32,7 +35,7 @@ export const request = {
     serverConfig: ServerConfig | null,
     nginxConfig: string
   ) => {
-    return await customFetch<{ err: string; output?: string }>(
+    return await customFetch<{ err?: string; output: string }>(
       `${baseUrl}/save_site`,
       {
         id,
@@ -42,10 +45,35 @@ export const request = {
     );
   },
 
-  SetPass: async (name: string, pass: string) => {
-    return await customFetch<{ err: string }>(`${baseUrl}/set_pass`, {
-      name,
-      pass,
+  ListCert: async (full = false) => {
+    return await customFetch<{ list: CertConfig[] }>(`${baseUrl}/list_cert`, {
+      full,
     });
+  },
+
+  SaveCert: async (c: CertConfig) => {
+    return await customFetch<{
+      err?: string;
+      output: string;
+      certConfig: CertConfig;
+    }>(`${baseUrl}/save_cert`, c);
+  },
+
+  DelCert: async (id: string) => {
+    return await customFetch<{ err?: string; output: string }>(
+      `${baseUrl}/del_cert`,
+      { id }
+    );
+  },
+
+  SetAuth: async (oldAuth: string, newAuth: string) => {
+    return await customFetch<{ err?: string }>(`${baseUrl}/set_auth`, {
+      oldAuth,
+      newAuth,
+    });
+  },
+
+  Logout: async () => {
+    return await customFetch<{ err?: string }>(`${baseUrl}/logout`, {});
   },
 };

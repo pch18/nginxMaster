@@ -2,7 +2,6 @@ import {
   Button,
   Form,
   Input,
-  Notification,
   Modal,
   Popconfirm,
   Space,
@@ -16,30 +15,17 @@ import { AsyncButton } from "@/components/AsyncButton";
 import { makeNginxServerConfig } from "@/common/makeNginxConfig";
 import { newServerConfig } from "@/common/newConfig";
 import { request } from "@/utils/request";
-
-export const handleNotification = (err: any, output?: string) => {
-  Notification.clear();
-  Notification[err ? "error" : "success"]({
-    duration: 3000,
-    closable: true,
-    title: err ? "执行失败" : "执行成功",
-    content: (
-      <div>
-        {output?.split("\n").map((c, i) => (
-          <div key={i} className="mb-2 select-text">
-            {c}
-          </div>
-        ))}
-      </div>
-    ),
-    className: err ? "!w-[600px]" : "!w-[400px]",
-  });
-};
+import { useMemo } from "react";
+import { actionNotification } from "@/common/actionNotification";
 
 export const openSiteModal = createNiceModal<
   { serverConfig?: ServerConfig },
   { serverConfig?: ServerConfig }
->(({ _modal, serverConfig = newServerConfig() }) => {
+>(({ _modal, serverConfig }) => {
+  const initServerConfig = useMemo(() => {
+    return serverConfig ?? newServerConfig();
+  }, []);
+
   const [formIns] = useForm();
   return (
     <Modal
@@ -47,18 +33,24 @@ export const openSiteModal = createNiceModal<
       maskClosable={false}
       footer={
         <Space size="medium">
-          <Popconfirm
-            onOk={async () => {
-              const res = await request.SaveSite(serverConfig.id, null, "");
-              handleNotification(res.err, res.output);
-              if (!res.err) {
-                _modal.resolve({});
-              }
-            }}
-            title="确认删除？"
-          >
-            <Button status="danger">删除</Button>
-          </Popconfirm>
+          {serverConfig && (
+            <Popconfirm
+              onOk={async () => {
+                const res = await request.SaveSite(
+                  initServerConfig.id,
+                  null,
+                  ""
+                );
+                actionNotification(res.err, res.output);
+                if (!res.err) {
+                  _modal.resolve({});
+                }
+              }}
+              title="确认删除？"
+            >
+              <Button status="danger">删除</Button>
+            </Popconfirm>
+          )}
 
           <Button
             type="outline"
@@ -93,7 +85,7 @@ export const openSiteModal = createNiceModal<
               const newServerConfig = formIns.getFields() as ServerConfig;
               const nginxCfg = makeNginxServerConfig(newServerConfig);
               const res = await request.VerifySite(nginxCfg);
-              handleNotification(res.err, res.output);
+              actionNotification(res.err, res.output);
             }}
           >
             测试
@@ -109,7 +101,7 @@ export const openSiteModal = createNiceModal<
                 newServerConfig,
                 nginxCfg
               );
-              handleNotification(res.err, res.output);
+              actionNotification(res.err, res.output);
               if (!res.err) {
                 _modal.resolve({ serverConfig: newServerConfig });
               }
@@ -122,12 +114,16 @@ export const openSiteModal = createNiceModal<
       title={
         <span>
           <span>站点信息 </span>
-          <span className="select-text">{serverConfig.id}</span>
+          <span className="select-text">{initServerConfig.id}</span>
         </span>
       }
-      className="min-w-[820px] !w-[85vw]"
+      className="min-w-[820px] max-w-[1280px] !w-[85vw]"
     >
-      <Form form={formIns} initialValues={serverConfig} className="!h-[65vh]">
+      <Form
+        form={formIns}
+        initialValues={initServerConfig}
+        className="!h-[65vh]"
+      >
         <div className="flex min-h-0">
           <PanelBasic
             formIns={formIns}

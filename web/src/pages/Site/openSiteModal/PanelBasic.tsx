@@ -5,14 +5,27 @@ import {
   Input,
   Select,
   Switch,
+  Tag,
 } from "@arco-design/web-react";
-import { type FC } from "react";
+import { useMemo, type FC } from "react";
 import clsx from "clsx";
+import { useCertList } from "@/common/useList";
+import { CertTitle } from "@/common/CertTitle";
 
 export const PanelBasic: FC<{ className?: string; formIns: FormInstance }> = ({
   className,
   formIns,
 }) => {
+  const { sortedList, certMapId } = useCertList();
+  const certOptions = useMemo(
+    () =>
+      sortedList.map((c) => ({
+        label: <CertTitle certConfig={c} />,
+        value: c.id,
+      })),
+    []
+  );
+
   return (
     <div className={clsx(className)}>
       <Form.Item
@@ -94,7 +107,15 @@ export const PanelBasic: FC<{ className?: string; formIns: FormInstance }> = ({
                   field="sslCertId"
                   label="证书"
                 >
-                  <Select />
+                  <Select
+                    options={certOptions}
+                    onChange={(sslCertId) => {
+                      formIns.setFieldsValue({
+                        sslCertPem: certMapId[sslCertId]?.pemPath,
+                        sslCertKey: certMapId[sslCertId]?.keyPath,
+                      });
+                    }}
+                  />
                 </Form.Item>
               </div>
             )}

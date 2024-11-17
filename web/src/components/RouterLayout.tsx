@@ -1,10 +1,12 @@
-import { Layout, Menu, Switch } from "@arco-design/web-react";
+import { Button, Layout, Menu, Switch } from "@arco-design/web-react";
 import { IconCalendar, IconMoon, IconSun } from "@arco-design/web-react/icon";
 import { Suspense, useLayoutEffect, useMemo } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { maxBy } from "lodash-es";
-import { useLocalStorageState } from "ahooks";
 import { useDarkMode } from "@/common/useDarkMode";
+import { AsyncButton } from "./AsyncButton";
+import { request } from "@/utils/request";
+import { openChangeAuthModal } from "@/common";
 
 export const RouterLayout: React.FC<{
   menuItems: Array<{
@@ -33,13 +35,27 @@ export const RouterLayout: React.FC<{
     <Layout className="min-h-full">
       <Layout.Header className="flex justify-between px-4 items-center h-12 bg-color-bg-2 shadow z-10 border-b border-color-border-2">
         <div className="text-xl">NginxMaster</div>
-        <div>
+        <div className="flex items-center gap-4">
           <Switch
             checkedText={<IconMoon />}
             uncheckedText={<IconSun />}
             checked={isDark}
             onChange={setIsDark}
           />
+          <Button
+            onClick={() => {
+              void openChangeAuthModal({});
+            }}
+          >
+            修改密码
+          </Button>
+          <AsyncButton
+            onClick={async () => {
+              await request.Logout();
+            }}
+          >
+            退出登录
+          </AsyncButton>
         </div>
       </Layout.Header>
 

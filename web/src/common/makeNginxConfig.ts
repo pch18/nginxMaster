@@ -5,8 +5,6 @@ import {
 } from "./interface";
 
 export const makeNginxServerConfig = (c: ServerConfig) => {
-  const sslPem = "1";
-  const sslKey = "1";
   const cmd: string[] = [
     `server_name ${c.domains
       .map((d) => d.trim())
@@ -21,11 +19,11 @@ export const makeNginxServerConfig = (c: ServerConfig) => {
     if (c.sslHttp2En) {
       cmd.push(`http2 on;`);
     }
-    if (sslPem) {
-      cmd.push(`ssl_certificate ${sslPem};`);
+    if (c.sslCertPem) {
+      cmd.push(`ssl_certificate ${c.sslCertPem};`);
     }
-    if (sslKey) {
-      cmd.push(`ssl_certificate_key ${sslKey};`);
+    if (c.sslCertKey) {
+      cmd.push(`ssl_certificate_key ${c.sslCertKey};`);
     }
     cmd.push(`ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;`);
     if (c.sslForceEn) {

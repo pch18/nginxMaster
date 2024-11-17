@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 )
 
-func ListServerConfigs() (list []map[string]any, err error) {
-
+func ListServer() (list []map[string]any, err error) {
+	list = []map[string]any{}
 	// 读取目录下的所有文件
 	files, err := os.ReadDir(ServerConfigDir)
 	if err != nil {
@@ -39,7 +39,7 @@ func ListServerConfigs() (list []map[string]any, err error) {
 	return
 }
 
-func UpdateServer(id string, serverConfig any, nginxConfig string) (string, error) {
+func SaveServer(id string, serverConfig any, nginxConfig string) (string, error) {
 	var serverConfigPath = fmt.Sprintf("%s/%s.json", ServerConfigDir, id)
 	var nginxConfigPath = fmt.Sprintf("%s/%s.conf", NginxConfigDir, id)
 
