@@ -1,6 +1,7 @@
+import { createGlobalStore } from "hox";
 import { useEffect, useState } from "react";
 
-export const useDarkMode = () => {
+export const [useDarkMode] = createGlobalStore(() => {
   const [isDark, setIsDark] = useState(() => {
     const m = window.matchMedia("(prefers-color-scheme: dark)");
     const sysDarkRaw = localStorage.getItem("_useDarkMode_sysDark");
@@ -36,4 +37,4 @@ export const useDarkMode = () => {
   }, []);
 
   return [isDark, setIsDark] as const;
-};
+});

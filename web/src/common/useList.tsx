@@ -4,10 +4,15 @@ import { useMemo } from "react";
 import { createGlobalStore } from "hox";
 
 export const [useSiteList] = createGlobalStore(() => {
-  const req = useRequest(async () => {
-    const { list } = await request.ListSite();
-    return list;
-  });
+  const req = useRequest(
+    async () => {
+      const { list } = await request.ListSite();
+      return list;
+    },
+    {
+      ready: location.pathname !== "/login",
+    }
+  );
   const sortedList = useMemo(() => {
     return req.data?.sort((a, b) => (a.id < b.id ? 1 : -1)) || [];
   }, [req.data]);
@@ -16,10 +21,15 @@ export const [useSiteList] = createGlobalStore(() => {
 });
 
 export const [useCertList] = createGlobalStore(() => {
-  const req = useRequest(async () => {
-    const { list } = await request.ListCert(true);
-    return list;
-  });
+  const req = useRequest(
+    async () => {
+      const { list } = await request.ListCert(true);
+      return list;
+    },
+    {
+      ready: location.pathname !== "/login",
+    }
+  );
   const sortedList = useMemo(() => {
     return req.data?.sort((a, b) => (a.id < b.id ? 1 : -1)) || [];
   }, [req.data]);

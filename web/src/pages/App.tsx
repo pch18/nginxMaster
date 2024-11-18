@@ -2,12 +2,17 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { RouterLayout } from "../components/RouterLayout";
 import Site from "./Site";
 import Cert from "./Cert";
-import Home from "./Home";
 import NiceModal from "@ebay/nice-modal-react";
-import { useCertList, useSiteList } from "@/common/useList";
 import { HoxRoot } from "hox";
+import Login from "./Login";
+import { useDarkMode } from "@/common/useDarkMode";
+import { useLayoutEffect } from "react";
 
 const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Login />,
+  },
   {
     path: "/",
     element: (
@@ -36,14 +41,21 @@ const router = createBrowserRouter([
   },
 ]);
 
-function App() {
+const Router = () => {
+  const [isDark] = useDarkMode();
+  useLayoutEffect(() => {
+    document.body.setAttribute("arco-theme", isDark ? "dark" : "");
+  }, [isDark]);
+
+  return <RouterProvider router={router} />;
+};
+
+export default function App() {
   return (
     <HoxRoot>
       <NiceModal.Provider>
-        <RouterProvider router={router} />
+        <Router />
       </NiceModal.Provider>
     </HoxRoot>
   );
 }
-
-export default App;

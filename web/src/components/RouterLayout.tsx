@@ -27,9 +27,6 @@ export const RouterLayout: React.FC<{
   }, [location]);
 
   const [isDark, setIsDark] = useDarkMode();
-  useLayoutEffect(() => {
-    document.body.setAttribute("arco-theme", isDark ? "dark" : "");
-  }, [isDark]);
 
   return (
     <Layout className="min-h-full">

@@ -25,7 +25,7 @@ func SetAuth(c *gin.Context) {
 	var ok bool
 
 	oldAuth, _ = requestBody["oldAuth"].(string)
-	if oldAuth != pkg.BasicAuthSecret {
+	if pkg.HashAuth(oldAuth) != pkg.CurUserPassHash {
 		c.JSON(http.StatusOK, gin.H{
 			"err": "oldAuth Wrong",
 		})
@@ -40,13 +40,36 @@ func SetAuth(c *gin.Context) {
 		return
 	}
 
-	pkg.BasicAuthSecret = newAuth
-	pkg.WriteFile(pkg.AuthFile, []byte(newAuth))
+	pkg.CurUserPassHash = pkg.HashAuth(newAuth)
+	pkg.WriteFile(pkg.UserPassFile, []byte(newAuth))
 
+	c.Status(401)
+	c.Abort()
+}
+
+func Login(c *gin.Context) {
+	var requestBody map[string]interface{}
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "Invalid JSON",
+		})
+		return
+	}
+
+	var auth string
+
+	auth, _ = requestBody["auth"].(string)
+	if len(auth) < 8 || pkg.HashAuth(auth) != pkg.CurUserPassHash {
+		c.JSON(http.StatusOK, gin.H{
+			"err": "auth Wrong",
+		})
+		return
+	}
+
+	pkg.Sign(c, auth)
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 func Logout(c *gin.Context) {
-	c.Header("WWW-Authenticate", `Basic realm="LoggedOut"`)
-	c.AbortWithStatus(http.StatusUnauthorized)
+	pkg.UnSign(c)
 }

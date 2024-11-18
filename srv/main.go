@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+
 	router := gin.Default()
 	router.GET("/*path", func(c *gin.Context) {
 		path := pkg.StaticDir + c.Param("path")
@@ -20,9 +21,11 @@ func main() {
 		}
 	})
 
-	apiRouter := router.Group("/api/v1/")
+	router.POST("/api/v1/login", ctl.Login)
+	router.POST("/api/v1/logout", ctl.Logout)
 
-	apiRouter.Use(pkg.BasicAuthMiddleware())
+	apiRouter := router.Group("/api/v1/", pkg.AuthMiddleWare)
+
 	apiRouter.POST("/list_site", ctl.ListSite)
 	apiRouter.POST("/save_site", ctl.SaveSite)
 	apiRouter.POST("/verify_site", ctl.VerifySite)
@@ -32,7 +35,6 @@ func main() {
 	apiRouter.POST("/del_cert", ctl.DelCert)
 
 	apiRouter.POST("/set_auth", ctl.SetAuth)
-	apiRouter.POST("/logout", ctl.Logout)
 
 	// 启动 HTTP 服务，监听在 8080 端口
 	router.Run(":9999")

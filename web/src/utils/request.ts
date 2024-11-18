@@ -13,6 +13,7 @@ const customFetch = async <T>(
     body: JSON.stringify(param),
   });
 
+  if (res.status === 401) location.href = "/login";
   if (res.status !== 200) throw new Error(`${res.status} ${res.statusText}`);
 
   return (await res.json()) as T;
@@ -71,6 +72,10 @@ export const request = {
       oldAuth,
       newAuth,
     });
+  },
+
+  Login: async (auth: string) => {
+    return await customFetch<{ err?: string }>(`${baseUrl}/login`, { auth });
   },
 
   Logout: async () => {
