@@ -24,7 +24,10 @@ export default function () {
 
   return (
     <div className="flex items-center justify-center w-full h-full">
-      <Form form={form} className="!w-[60vw]  bg-color-border-2 shadow-lg p-10">
+      <Form
+        form={form}
+        className="!w-[60vw]  min-w-[320px] max-w-[640px]  bg-color-border-2 shadow-lg p-10"
+      >
         <div className="text-4xl mx-auto pb-12">
           <div>NginxMaster</div>
           <div className="text-base text-left">

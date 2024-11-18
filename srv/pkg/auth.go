@@ -43,7 +43,7 @@ func AuthMiddleWare(ctx *gin.Context) {
 
 func SignCookie(ctx *gin.Context, hash string) {
 	ctx.SetCookie(cookieName, hash, cookieExpire,
-		"/", "", true, true)
+		"/", "", false, true)
 }
 
 func HashAuth(input string) string {
