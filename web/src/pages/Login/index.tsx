@@ -2,9 +2,26 @@ import { AsyncButton } from "@/components/AsyncButton";
 import { request } from "@/utils/request";
 import { Form, Input, Message } from "@arco-design/web-react";
 import useForm from "@arco-design/web-react/es/Form/useForm";
+import { useRef } from "react";
 
 export default function () {
   const [form] = useForm();
+  const handleSubmit = async () => {
+    const { username, password } = (await form.validate()) as Record<
+      string,
+      string
+    >;
+    const auth = btoa(`${username || ""}:${password || ""}`);
+    const resp = await request.Login(auth);
+    if (resp.err) {
+      Message.error("登录失败");
+    } else {
+      Message.success("登录成功");
+      window.location.pathname = "/";
+    }
+  };
+  const btnRef = useRef<HTMLButtonElement>(null);
+
   return (
     <div className="flex items-center justify-center w-full h-full">
       <Form form={form} className="!w-[60vw]  bg-color-border-2 shadow-lg p-10">
@@ -32,32 +49,32 @@ export default function () {
             field="username"
             rules={[{ required: true, message: "请填写用户名" }]}
           >
-            <Input placeholder="用户名" autoComplete="new-password" />
+            <Input
+              placeholder="用户名"
+              autoComplete="new-password"
+              onPressEnter={() => {
+                btnRef.current?.click();
+              }}
+            />
           </Form.Item>
           <Form.Item
             noStyle
             field="password"
             rules={[{ required: true, message: "请填写密码" }]}
           >
-            <Input.Password placeholder="密码" autoComplete="new-password" />
+            <Input.Password
+              placeholder="密码"
+              autoComplete="new-password"
+              onPressEnter={() => {
+                btnRef.current?.click();
+              }}
+            />
           </Form.Item>
           <AsyncButton
+            ref={btnRef}
             type="primary"
             className="mt-6"
-            onClick={async () => {
-              const { username, password } = (await form.validate()) as Record<
-                string,
-                string
-              >;
-              const auth = btoa(`${username || ""}:${password || ""}`);
-              const resp = await request.Login(auth);
-              if (resp.err) {
-                Message.error("登录失败");
-              } else {
-                Message.success("登录成功");
-                window.location.pathname = "/";
-              }
-            }}
+            onClick={handleSubmit}
           >
             登录
           </AsyncButton>

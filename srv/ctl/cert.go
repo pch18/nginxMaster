@@ -77,7 +77,8 @@ func SaveCert(c *gin.Context) {
 	output, err := pkg.SaveCert(id, requestBody, pemRaw, keyRaw)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"err": "SaveCert Failed",
+			"output": output,
+			"err":    "SaveCert Failed",
 		})
 		return
 	}

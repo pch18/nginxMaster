@@ -8,7 +8,7 @@ import (
 
 func NginxReload() (string, error) {
 	// 创建一个 exec.Command 来执行 nginx -s reload 命令
-	cmd := exec.Command(NginxBin, "-s", "reload")
+	cmd := exec.Command(NginxBin, "-s", "reload", "-c", NginxConfigPath)
 
 	// 使用 CombinedOutput 方法来运行命令，并获取输出和错误信息
 	output, err := cmd.CombinedOutput()

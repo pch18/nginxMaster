@@ -1,14 +1,18 @@
 package pkg
 
 const (
-	NginxBin        = "nginx"
-	NginxConfigPath = "/opt/homebrew/etc/nginx/nginx.conf"
-	NginxConfigDir  = "/opt/homebrew/etc/nginx/servers"
+	NginxBin = "nginx"
+	WebDir   = "/nginx_master_web"
 
-	CfgBase         = "/Users/pch18/Codes/github/nginxMaster/cfg"
+	CfgBase = "/nginx_master"
+	// CfgBase         = "/Users/pch18/Codes/github/nginxMaster/cfg"
+
 	AuthFile        = CfgBase + "/auth"
 	ServerConfigDir = CfgBase + "/servers"
 	CertDir         = CfgBase + "/certs"
 
-	StaticDir = "/Users/pch18/Codes/github/nginxMaster/web/dist"
+	NginxConfigPath = CfgBase + "/nginx.conf"
+	NginxConfigDir  = CfgBase + "/servers"
+	// NginxConfigPath = "/opt/homebrew/etc/nginx/nginx.conf"
+	// NginxConfigDir  = "/opt/homebrew/etc/nginx/servers"
 )

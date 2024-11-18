@@ -10,7 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const initUserPass = "admin:admin9999"
+// admin:admin9999
+const initUserPass = "YWRtaW46YWRtaW45OTk5"
 const cookieName = "_x_"
 const cookieExpire = 7200
 

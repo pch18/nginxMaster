@@ -1,0 +1,17 @@
+#!/bin/sh
+
+echo "start nginx -c /nginx_master/nginx.conf ..."
+nginx -c /nginx_master/nginx.conf
+if [ $? -ne 0 ]; then
+    echo "Failed to start Nginx ..."
+else
+    echo "Nginx running ..."
+fi
+
+while true; do
+    echo "Starting NginxMaster ..."
+    /nginx_master_app
+    EXIT_CODE=$?
+    echo "NginxMaster exited with code $EXIT_CODE, restarting in 1 second..."
+    sleep 1
+done

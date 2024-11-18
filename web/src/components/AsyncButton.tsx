@@ -1,9 +1,10 @@
 import { Button, type ButtonProps } from "@arco-design/web-react";
-import { useState, type FC } from "react";
+import { forwardRef, useState, type FC } from "react";
 
-export const AsyncButton: FC<
+export const AsyncButton = forwardRef<
+  HTMLButtonElement,
   Omit<ButtonProps, "onClick"> & { onClick: (e: Event) => Promise<void> }
-> = ({ onClick, ...otherProps }) => {
+>(({ onClick, ...otherProps }, ref) => {
   const [loading, setLoading] = useState(false);
   const handleClick = async (e: Event) => {
     setLoading(true);
@@ -15,5 +16,7 @@ export const AsyncButton: FC<
     }
   };
 
-  return <Button onClick={handleClick} loading={loading} {...otherProps} />;
-};
+  return (
+    <Button ref={ref} onClick={handleClick} loading={loading} {...otherProps} />
+  );
+});

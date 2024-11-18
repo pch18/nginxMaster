@@ -12,10 +12,10 @@ func main() {
 
 	router := gin.Default()
 	router.GET("/*path", func(c *gin.Context) {
-		path := pkg.StaticDir + c.Param("path")
+		path := pkg.WebDir + c.Param("path")
 		_, err := os.Stat(path)
 		if os.IsNotExist(err) {
-			c.File(pkg.StaticDir + "/index.html")
+			c.File(pkg.WebDir + "/index.html")
 		} else {
 			c.File(path)
 		}
