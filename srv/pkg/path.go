@@ -6,7 +6,7 @@ const (
 	NginxConfigDir  = "/opt/homebrew/etc/nginx/servers"
 
 	CfgBase         = "/Users/pch18/Codes/github/nginxMaster/cfg"
-	UserPassFile    = CfgBase + "/auth"
+	AuthFile        = CfgBase + "/auth"
 	ServerConfigDir = CfgBase + "/servers"
 	CertDir         = CfgBase + "/certs"
 

@@ -12,51 +12,45 @@ import (
 
 const initUserPass = "admin:admin9999"
 const cookieName = "_x_"
+const cookieExpire = 7200
 
-var hashAuthKey []byte
-
-var CurUserPassHash string
+var AuthHashKey []byte
+var CurAuthWithHash string
 
 func init() {
 	timestamp := time.Now().UnixNano()
-	hashAuthKey = []byte(strconv.FormatInt(timestamp, 36))
+	AuthHashKey = []byte(strconv.FormatInt(timestamp, 36))
 
-	_userPass, err := os.ReadFile(UserPassFile)
+	_userPass, err := os.ReadFile(AuthFile)
 	if err == nil {
-		CurUserPassHash = HashAuthByte(_userPass)
+		CurAuthWithHash = HashAuthByte(_userPass)
 	} else if os.IsNotExist((err)) {
-		CurUserPassHash = HashAuth(initUserPass)
+		CurAuthWithHash = HashAuth(initUserPass)
 	}
 }
 
 func AuthMiddleWare(ctx *gin.Context) {
 	cookieAuth, err := ctx.Request.Cookie(cookieName)
-	if err != nil || cookieAuth.Value != CurUserPassHash {
+	if err != nil || cookieAuth.Value != CurAuthWithHash {
 		ctx.Status(401)
 		ctx.Abort()
 		return
 	}
+	SignCookie(ctx, cookieAuth.Value)
 	ctx.Next()
 }
 
-func Sign(ctx *gin.Context, key string) {
-	ctx.SetCookie(cookieName, HashAuth(key), 86400,
+func SignCookie(ctx *gin.Context, hash string) {
+	ctx.SetCookie(cookieName, hash, cookieExpire,
 		"/", "", true, true)
-}
-
-func UnSign(ctx *gin.Context) {
-	ctx.SetCookie(cookieName, "", 86400,
-		"/", "", true, true)
-	ctx.Status(401)
-	ctx.Abort()
 }
 
 func HashAuth(input string) string {
-	hash := md5.Sum(append(hashAuthKey, []byte(input)...))
+	hash := md5.Sum(append(AuthHashKey, []byte(input)...))
 	return hex.EncodeToString(hash[:])
 }
 
 func HashAuthByte(input []byte) string {
-	hash := md5.Sum(append(hashAuthKey, input...))
+	hash := md5.Sum(append(AuthHashKey, input...))
 	return hex.EncodeToString(hash[:])
 }

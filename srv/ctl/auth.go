@@ -25,9 +25,9 @@ func SetAuth(c *gin.Context) {
 	var ok bool
 
 	oldAuth, _ = requestBody["oldAuth"].(string)
-	if pkg.HashAuth(oldAuth) != pkg.CurUserPassHash {
+	if pkg.HashAuth(oldAuth) != pkg.CurAuthWithHash {
 		c.JSON(http.StatusOK, gin.H{
-			"err": "oldAuth Wrong",
+			"err": "Wrong oldAuth",
 		})
 		return
 	}
@@ -40,8 +40,8 @@ func SetAuth(c *gin.Context) {
 		return
 	}
 
-	pkg.CurUserPassHash = pkg.HashAuth(newAuth)
-	pkg.WriteFile(pkg.UserPassFile, []byte(newAuth))
+	pkg.CurAuthWithHash = pkg.HashAuth(newAuth)
+	pkg.WriteFile(pkg.AuthFile, []byte(newAuth))
 
 	c.Status(401)
 	c.Abort()
@@ -56,20 +56,28 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	var auth string
-
-	auth, _ = requestBody["auth"].(string)
-	if len(auth) < 8 || pkg.HashAuth(auth) != pkg.CurUserPassHash {
+	auth, _ := requestBody["auth"].(string)
+	if len(auth) < 8 {
 		c.JSON(http.StatusOK, gin.H{
-			"err": "auth Wrong",
+			"err": "Invalid auth",
 		})
 		return
 	}
 
-	pkg.Sign(c, auth)
+	hashAuth := pkg.HashAuth(auth)
+	if hashAuth != pkg.CurAuthWithHash {
+		c.JSON(http.StatusOK, gin.H{
+			"err": "Wrong auth",
+		})
+		return
+	}
+
+	pkg.SignCookie(c, hashAuth)
 	c.JSON(http.StatusOK, gin.H{})
 }
 
 func Logout(c *gin.Context) {
-	pkg.UnSign(c)
+	pkg.SignCookie(c, "")
+	c.Status(401)
+	c.Abort()
 }
