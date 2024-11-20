@@ -81,4 +81,28 @@ export const request = {
   Logout: async () => {
     return await customFetch<{ err?: string }>(`${baseUrl}/logout`, {});
   },
+
+  nginxStatus: async () => {
+    return await customFetch<{ running: boolean }>(
+      `${baseUrl}/nginx_status`,
+      {}
+    );
+  },
+
+  nginxStart: async () => {
+    return await customFetch<{ err?: string; output: string }>(
+      `${baseUrl}/nginx_start`,
+      {}
+    );
+  },
+
+  nginxLogs: async () => {
+    const sse = new EventSource(`${baseUrl}/nginx_logs`);
+    // sse.addEventListener
+    // return await customFetch<{ err?: string; output: string }>(
+    //   `${baseUrl}/nginx_logs`,
+    //   {}
+    // );
+    return sse;
+  },
 };
