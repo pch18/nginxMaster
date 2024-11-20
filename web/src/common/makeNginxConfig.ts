@@ -47,16 +47,6 @@ export const makeNginxServerConfig = (c: ServerConfig) => {
     c.nginxRaw.split("\n").forEach((r) => cmd.push(r));
   }
 
-  if (c.staticCacheEn) {
-    cmd.push("");
-    cmd.push(
-      "location ~* .(css|js|eot|ttf|otf|woff|woff2|jpg|jpeg|png|gif|ico|svg|webp|tiff|bmp)$ {"
-    );
-    cmd.push("\texpires 30d;");
-    cmd.push('\tadd_header Cache-Control "public, no-transform";');
-    cmd.push("}");
-  }
-
   c.locations.forEach((cl) => {
     cmd.push("");
 
@@ -85,6 +75,15 @@ export const makeNginxLocationConfig = (
     if (c.static_spaEn && c.static_spa) {
       cmd.push(`try_files $uri ${c.static_spa};`);
     }
+    if (cs.staticCacheEn) {
+      cmd.push("");
+      cmd.push(
+        `if ($request_uri ~* \\.(css|js|eot|ttf|otf|woff|woff2|jpg|jpeg|png|gif|ico|svg|webp|tiff|bmp)$) {`
+      );
+      cmd.push(`\texpires 30d;`);
+      cmd.push(`\tadd_header Cache-Control "public, no-transform";`);
+      cmd.push(`}`);
+    }
   } else if (c.mode === LocationMode.Proxy) {
     cmd.push(`proxy_pass ${c.proxy_target};`);
     cmd.push(`proxy_set_header Host ${c.proxy_host || "$host"};`);
@@ -93,6 +92,13 @@ export const makeNginxLocationConfig = (
     cmd.push(`proxy_set_header X-Forwarded-Host $http_host;`);
     cmd.push(`proxy_set_header X-Forwarded-Port $server_port;`);
     cmd.push(`proxy_set_header X-Forwarded-Proto $scheme;`);
+
+    if (c.proxy_wsEn) {
+      cmd.push(`proxy_http_version 1.1;`);
+      cmd.push(`proxy_set_header Upgrade $http_upgrade;`);
+      cmd.push(`proxy_set_header Connection $connection_upgrade;`);
+    }
+
     if (cs.sslForceEn) {
       cmd.push(`proxy_redirect http:// https://;`);
     }
@@ -104,6 +110,7 @@ export const makeNginxLocationConfig = (
     );
   }
   if (c.nginxRaw.trim()) {
+    cmd.length && cmd.push("");
     c.nginxRaw.split("\n").forEach((r) => cmd.push(r));
   }
   return `location ${c.path} {

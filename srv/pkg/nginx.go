@@ -1,14 +1,17 @@
 package pkg
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func NginxReload() (string, error) {
 	// 创建一个 exec.Command 来执行 nginx -s reload 命令
-	cmd := exec.Command(NginxBin, "-s", "reload", "-c", NginxConfigPath)
+	cmd := exec.Command(NginxBin, "-s", "reload")
 
 	// 使用 CombinedOutput 方法来运行命令，并获取输出和错误信息
 	output, err := cmd.CombinedOutput()
@@ -21,24 +24,43 @@ func NginxReload() (string, error) {
 
 func NginxVerify(config string) (string, error) {
 	// 创建临时文件
-	tmpfile, err := os.CreateTemp("", "nginx-*.conf")
+	nginxTempFile, err := os.CreateTemp("", "nginx-*.conf")
 	if err != nil {
 		return "", fmt.Errorf("failed to create temp file: %w", err)
 	}
-	defer os.Remove(tmpfile.Name()) // 确保函数结束时删除临时文件
+	defer nginxTempFile.Close() // 确保函数结束时删除临时文件
 
-	config = fmt.Sprintf("events{}\nhttp{\n%s\n}", config)
-	fmt.Println(config)
-	// 写入配置内容到临时文件
-	if _, err := tmpfile.Write([]byte(config)); err != nil {
-		return "", fmt.Errorf("failed to write to temp file: %w", err)
+	nginxRootFile, err := os.Open(NginxRootFile)
+	if err != nil {
+		return "", fmt.Errorf("failed to open nginxRootFile: %w", err)
 	}
-	if err := tmpfile.Close(); err != nil {
-		return "", fmt.Errorf("failed to close temp file: %w", err)
+	defer nginxRootFile.Close()
+
+	reader := bufio.NewReader(nginxRootFile)
+	writer := bufio.NewWriter(nginxTempFile)
+	for {
+		line, readErr := reader.ReadString('\n')
+		if readErr != nil && readErr != io.EOF {
+			return "", fmt.Errorf("failed to read nginxRootFile: %w", err)
+		}
+
+		if strings.Contains(line, "#@VERIFY_REPLACE_LINE@#") {
+			line = config + "\n"
+		}
+
+		_, writeErr := writer.WriteString(line)
+		if writeErr != nil {
+			return "", fmt.Errorf("failed to write nginxTempFile: %w", err)
+		}
+
+		if readErr == io.EOF {
+			break
+		}
 	}
+	writer.Flush()
 
 	// 创建一个 exec.Command 来执行 nginx -t -c 命令
-	cmd := exec.Command(NginxBin, "-t", "-c", tmpfile.Name())
+	cmd := exec.Command(NginxBin, "-t", "-c", nginxTempFile.Name())
 
 	// 使用 CombinedOutput 方法来运行命令，并获取输出和错误信息
 	output, err := cmd.CombinedOutput()

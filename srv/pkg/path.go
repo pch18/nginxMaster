@@ -11,8 +11,9 @@ const (
 	ServerConfigDir = CfgBase + "/servers"
 	CertDir         = CfgBase + "/certs"
 
-	NginxConfigPath = CfgBase + "/nginx.conf"
-	NginxConfigDir  = CfgBase + "/servers"
-	// NginxConfigPath = "/opt/homebrew/etc/nginx/nginx.conf"
+	NginxConfigDir = CfgBase + "/servers"
+	NginxRootFile  = "/etc/nginx/nginx.conf"
+
 	// NginxConfigDir  = "/opt/homebrew/etc/nginx/servers"
+	// NginxRootFile = "/opt/homebrew/etc/nginx/nginx.conf"
 )

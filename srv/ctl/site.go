@@ -81,16 +81,17 @@ func SaveSite(c *gin.Context) {
 		})
 		return
 	}
-	output, err := pkg.NginxVerify(nginxConfig)
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"err":    "NginxVerify Failed",
-			"output": output,
-		})
-		return
-	}
 
-	output, err = pkg.SaveServer(id, serverConfig, nginxConfig)
+	// output, err := pkg.NginxVerify(nginxConfig)
+	// if err != nil {
+	// 	c.JSON(http.StatusOK, gin.H{
+	// 		"err":    "NginxVerify Failed",
+	// 		"output": output,
+	// 	})
+	// 	return
+	// }
+
+	output, err := pkg.SaveServer(id, serverConfig, nginxConfig)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"err":    "UpdateServer Failed",

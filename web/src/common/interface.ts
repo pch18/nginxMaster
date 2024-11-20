@@ -86,6 +86,10 @@ export enum LocationMode {
 export interface CertConfig {
   id: string;
   type: CertType;
+  /** 创建时间 */
+  createdAt: number;
+  /** 修改时间 */
+  updateAt: number;
 
   /** 自定义的名称 */
   name: string;

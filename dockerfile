@@ -3,10 +3,6 @@ from golang:alpine3.20 as builder
 
 workdir /srv
 
-# copy ./srv/go.mod /srv
-# copy ./srv/go.sum /srv
-# run go mod download
-
 copy ./srv /srv
 run go build -o /app-bin .
 
@@ -17,16 +13,16 @@ from nginx:stable-alpine-perl
 copy --from=builder /app-bin /nginx_master_app
 copy ./web/dist /nginx_master_web
 
-copy ./entrypoint /entrypoint
-copy ./nginx.conf /nginx_master/nginx.conf
+copy ./entrypoint /nginx_master_entrypoint
+copy ./nginx.conf /etc/nginx/nginx.conf
 
-run mkdir /nginx_master/servers \
-    && mkdir /nginx_master/certs \
-    && mkdir /nginx_master/logs \
-    && chmod -R 755 /nginx_master /nginx_master_web /nginx_master_app /entrypoint
+run mkdir -p /nginx_master/servers \
+    && mkdir -p /nginx_master/certs \
+    && mkdir -p /nginx_master/logs \
+    && chmod -R 755 /nginx_master /nginx_master_web /nginx_master_app /nginx_master_entrypoint
 
 workdir /nginx_master
 volume /nginx_master
 
-entrypoint ["/entrypoint"]
+entrypoint ["/nginx_master_entrypoint"]
 cmd []

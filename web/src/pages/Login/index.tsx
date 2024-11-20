@@ -1,5 +1,6 @@
 import { AsyncButton } from "@/components/AsyncButton";
 import { request } from "@/utils/request";
+import { version } from "@/utils/version";
 import { Form, Input, Message } from "@arco-design/web-react";
 import useForm from "@arco-design/web-react/es/Form/useForm";
 import { useRef } from "react";
@@ -31,11 +32,11 @@ export default function () {
         <div className="text-4xl mx-auto pb-12">
           <div>NginxMaster</div>
           <div className="text-base text-left">
-            <span>v1.0.0</span>
+            <span>v{version}</span>
             <span className="float-right">
               by{" "}
               <a
-                href="https://pch18.cn"
+                href="https://pch18.cn/archives/529.html"
                 className="underline"
                 target="_blank"
                 rel="noreferrer"

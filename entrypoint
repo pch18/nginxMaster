@@ -1,7 +1,7 @@
 #!/bin/sh
 
-echo "start nginx -c /nginx_master/nginx.conf ..."
-nginx -c /nginx_master/nginx.conf
+echo "start nginx ..."
+nginx
 if [ $? -ne 0 ]; then
     echo "Failed to start Nginx ..."
 else

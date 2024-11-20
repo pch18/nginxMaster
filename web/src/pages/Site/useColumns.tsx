@@ -13,9 +13,10 @@ import { request } from "@/utils/request";
 import { actionNotification } from "@/common/actionNotification";
 import { CertTitle } from "@/common/CertTitle";
 import { useCertList } from "@/common/useList";
+import { makeId } from "@/common/newConfig";
 
 export const useColumns = (
-  mutable: (fn: (s?: ServerConfig[]) => ServerConfig[] | undefined) => void
+  mutate: (fn: (s?: ServerConfig[]) => ServerConfig[] | undefined) => void
 ): TableColumnProps[] => {
   const { certMapId } = useCertList();
 
@@ -96,28 +97,42 @@ export const useColumns = (
                 );
                 actionNotification(res.err, res.output);
                 if (!res.err) {
-                  mutable((s1) =>
-                    s1?.map((s2) => (s2.id === s.id ? newS : s2))
-                  );
+                  mutate((s1) => s1?.map((s2) => (s2.id === s.id ? newS : s2)));
                 }
               }}
             />
+
             <Button
+              type="outline"
               onClick={() => {
                 void openSiteModal({ serverConfig: s }).then(
                   ({ serverConfig }) => {
                     if (serverConfig) {
-                      mutable((s1) =>
+                      mutate((s1) =>
                         s1?.map((s2) => (s2.id === s.id ? serverConfig : s2))
                       );
                     } else {
-                      mutable((s1) => s1?.filter((s2) => s2.id !== s.id));
+                      mutate((s1) => s1?.filter((s2) => s2.id !== s.id));
                     }
                   }
                 );
               }}
             >
               编辑
+            </Button>
+
+            <Button
+              onClick={() => {
+                void openSiteModal({
+                  serverConfig: { ...s, id: makeId(), domains: [] },
+                }).then(({ serverConfig }) => {
+                  if (serverConfig) {
+                    mutate((s) => [...(s ?? []), serverConfig]);
+                  }
+                });
+              }}
+            >
+              克隆
             </Button>
           </div>
         );

@@ -29,7 +29,7 @@ export const newServerConfig = (): ServerConfig => {
     sslHttp2En: true,
     sslForceEn: false,
 
-    staticCacheEn: false,
+    staticCacheEn: true,
     accessLogOff: false,
     locations: [newLocationConfig()],
   };
@@ -48,7 +48,7 @@ export const newLocationConfig = (): LocationConfig => {
     proxy_host: "$host",
 
     static_root: "/app",
-    static_indexEn: false,
+    static_indexEn: true,
     static_index: "index.html",
     static_spaEn: false,
     static_spa: "/index.html",
@@ -64,6 +64,8 @@ export const newCertConfig = (): CertConfig => {
     id: makeId(),
     type: CertType.Custom,
     name: "",
+    createdAt: Date.now(),
+    updateAt: Date.now(),
 
     domain: "",
     issuer: "",

@@ -6,7 +6,8 @@ import { maxBy } from "lodash-es";
 import { useDarkMode } from "@/common/useDarkMode";
 import { AsyncButton } from "./AsyncButton";
 import { request } from "@/utils/request";
-import { openChangeAuthModal } from "@/common";
+import { openChangeAuthModal } from "@/common/openChangeAuthModal";
+import { version } from "@/utils/version";
 
 export const RouterLayout: React.FC<{
   menuItems: Array<{
@@ -29,9 +30,9 @@ export const RouterLayout: React.FC<{
   const [isDark, setIsDark] = useDarkMode();
 
   return (
-    <Layout className="min-h-full">
+    <Layout className="h-full overflow-hidden">
       <Layout.Header className="flex justify-between px-4 items-center h-12 bg-color-bg-2 shadow z-10 border-b border-color-border-2">
-        <div className="text-xl">NginxMaster</div>
+        <div className="text-xl flex items-end">NginxMaster</div>
         <div className="flex items-center gap-4">
           <Switch
             checkedText={<IconMoon />}
@@ -56,7 +57,8 @@ export const RouterLayout: React.FC<{
         </div>
       </Layout.Header>
 
-      <Layout>
+      {/* // arco-layout-has-sider 是为了避免框架无效重渲染，导致第一次content区域渲染宽度没有减去sider, 会导致 echart 首次加载时宽度异常 */}
+      <Layout className="overflow-hidden arco-layout-has-sider">
         <Layout.Sider width={120}>
           <Menu selectedKeys={openMenu ? [openMenu.path] : []}>
             {menuItems.map((item) => (
@@ -70,10 +72,27 @@ export const RouterLayout: React.FC<{
           </Menu>
         </Layout.Sider>
 
-        <Layout.Content>
-          <Suspense>
-            <Outlet />
-          </Suspense>
+        <Layout.Content className="overflow-hidden flex flex-col">
+          <div className="overflow-y-auto flex-1">
+            <Suspense>
+              <Outlet />
+            </Suspense>
+          </div>
+
+          <Layout.Footer className="border-t border-color-border-2 flex justify-center text-sm">
+            <span>NginxMaster v{version}</span>
+            <span className="ml-6">
+              Provided By{" "}
+              <a
+                href="https://pch18.cn/archives/529.html"
+                className="underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Pch18.cn
+              </a>
+            </span>
+          </Layout.Footer>
         </Layout.Content>
       </Layout>
     </Layout>

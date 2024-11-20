@@ -7,13 +7,14 @@ html,
 #root {
   width: 100%;
   height: 100%;
+  min-width: 1024px;
   user-select: none;
 }
 
 // feat: 暗黑模式默认背景色
 body {
   background-color: var(--color-bg-1);
-  color: var(--color-text-1);
+  color: var(--color-text-2);
 }
 
 // fix: tailwind会给svg设置为block, 导致Arco.Form.Item.Label前面的必填星号显示错乱

@@ -15,7 +15,10 @@
 
 ## docker 安装命令:
 ```
-docker run -d --name nginx-master --net=host pch18/nginx-master
+docker run -d --name nginx-master --net=host --restart always pch18/nginx-master
+```
+```
+docker run -d --name nginx-master -p 9999:9999 -p 443:443 -p 80:80 --restart always pch18/nginx-master
 ```
 支持多架构，amd64, arm64 等，如果缺了某个架构的构建，请提 issue
 

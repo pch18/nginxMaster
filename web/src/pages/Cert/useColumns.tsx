@@ -4,7 +4,7 @@ import { openCertModal } from "./openCertModal";
 import dayjs from "dayjs";
 
 export const useColumns = (
-  mutable: (fn: (s?: CertConfig[]) => CertConfig[] | undefined) => void
+  mutate: (fn: (s?: CertConfig[]) => CertConfig[] | undefined) => void
 ): TableColumnProps[] => [
   {
     title: "#",
@@ -45,11 +45,11 @@ export const useColumns = (
             onClick={() => {
               void openCertModal({ certConfig: s }).then(({ certConfig }) => {
                 if (certConfig) {
-                  mutable((s1) =>
+                  mutate((s1) =>
                     s1?.map((s2) => (s2.id === s.id ? certConfig : s2))
                   );
                 } else {
-                  mutable((s1) => s1?.filter((s2) => s2.id !== s.id));
+                  mutate((s1) => s1?.filter((s2) => s2.id !== s.id));
                 }
               });
             }}

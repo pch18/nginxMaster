@@ -14,7 +14,7 @@ export const [useSiteList] = createGlobalStore(() => {
     }
   );
   const sortedList = useMemo(() => {
-    return req.data?.sort((a, b) => (a.id < b.id ? 1 : -1)) || [];
+    return req.data?.sort((a, b) => (a.id > b.id ? 1 : -1)) || [];
   }, [req.data]);
 
   return { sortedList, ...req };
@@ -31,7 +31,7 @@ export const [useCertList] = createGlobalStore(() => {
     }
   );
   const sortedList = useMemo(() => {
-    return req.data?.sort((a, b) => (a.id < b.id ? 1 : -1)) || [];
+    return req.data?.sort((a, b) => (a.id > b.id ? 1 : -1)) || [];
   }, [req.data]);
   const certMapId = useMemo(() => {
     return Object.fromEntries(req.data?.map((item) => [item.id, item]) || []);

@@ -95,6 +95,8 @@ export const openSiteModal = createNiceModal<
             onClick={async () => {
               await formIns.validate();
               const newServerConfig = formIns.getFields() as ServerConfig;
+              newServerConfig.updateAt = Date.now();
+
               const nginxCfg = makeNginxServerConfig(newServerConfig);
               const res = await request.SaveSite(
                 newServerConfig.id,

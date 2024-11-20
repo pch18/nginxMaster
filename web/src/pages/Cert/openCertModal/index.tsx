@@ -44,6 +44,8 @@ export const openCertModal = createNiceModal<
             onClick={async () => {
               await formIns.validate();
               const newCertConfig = formIns.getFields() as CertConfig;
+              newCertConfig.updateAt = Date.now();
+
               const res = await request.SaveCert(newCertConfig);
               actionNotification(res.err, res.output);
               if (!res.err) {
