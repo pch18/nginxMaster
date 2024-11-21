@@ -13,6 +13,7 @@ func ListSite(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"err": "ListServerConfigs Failed",
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{

@@ -6,7 +6,9 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
+	"syscall"
 )
 
 func NginxReload() (string, error) {
@@ -68,5 +70,49 @@ func NginxVerify(config string) (string, error) {
 		return string(output), fmt.Errorf("failed to verify nginx config: %w", err)
 	}
 
+	return string(output), nil
+}
+
+func NginxStatus() (bool, error) {
+	pidByte, err := os.ReadFile(NginxPidFile)
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	if err != nil {
+		err = fmt.Errorf("failed to ReadFile NginxPidFile: %w", err)
+		return false, err
+	}
+
+	pid, err := strconv.ParseInt(strings.TrimSpace(string(pidByte)), 10, 0)
+	if err != nil {
+		err = fmt.Errorf("failed to ParseInt pid[%s]: %w", pidByte, err)
+		return false, err
+	}
+
+	process, err := os.FindProcess(int(pid))
+	if err != nil {
+		return false, nil
+	}
+
+	// 发送 0 信号，不会真正发送信号，但是可以用来检测进程是否存在
+	err = process.Signal(syscall.Signal(0))
+	if err == nil {
+		return true, nil
+	}
+
+	if err == os.ErrProcessDone {
+		return false, nil
+	}
+
+	err = fmt.Errorf("failed to Signal pid[%d]: %w", pid, err)
+	return false, err
+}
+
+func NginxStart() (string, error) {
+	cmd := exec.Command(NginxBin)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return string(output), fmt.Errorf("failed to start nginx: %w", err)
+	}
 	return string(output), nil
 }

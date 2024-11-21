@@ -43,8 +43,8 @@ func SetAuth(c *gin.Context) {
 	pkg.CurAuthWithHash = pkg.HashAuth(newAuth)
 	pkg.WriteFile(pkg.AuthFile, []byte(newAuth))
 
-	c.Status(401)
-	c.Abort()
+	c.AbortWithStatus(401)
+
 }
 
 func Login(c *gin.Context) {
@@ -78,6 +78,5 @@ func Login(c *gin.Context) {
 
 func Logout(c *gin.Context) {
 	pkg.SignCookie(c, "")
-	c.Status(401)
-	c.Abort()
+	c.AbortWithStatus(401)
 }

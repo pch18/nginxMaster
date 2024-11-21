@@ -21,6 +21,7 @@ func ListCert(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"err": "ListCertConfigs Failed",
 		})
+		return
 	}
 
 	full, _ := requestBody["full"].(bool)

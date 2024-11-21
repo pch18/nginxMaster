@@ -1,4 +1,4 @@
-import { Button, Layout, Menu, Switch } from "@arco-design/web-react";
+import { Button, Layout, Menu, Switch, Tag } from "@arco-design/web-react";
 import { IconCalendar, IconMoon, IconSun } from "@arco-design/web-react/icon";
 import { Suspense, useLayoutEffect, useMemo } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
@@ -8,6 +8,7 @@ import { AsyncButton } from "./AsyncButton";
 import { request } from "@/utils/request";
 import { openChangeAuthModal } from "@/common/openChangeAuthModal";
 import { version } from "@/utils/version";
+import { NginxStatus } from "./NginxStatus";
 
 export const RouterLayout: React.FC<{
   menuItems: Array<{
@@ -79,19 +80,25 @@ export const RouterLayout: React.FC<{
             </Suspense>
           </div>
 
-          <Layout.Footer className="border-t border-color-border-2 flex justify-center text-sm">
-            <span>NginxMaster v{version}</span>
-            <span className="ml-6">
-              Provided By{" "}
-              <a
-                href="https://pch18.cn/archives/529.html"
-                className="underline"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Pch18.cn
-              </a>
-            </span>
+          <Layout.Footer className="border-t border-color-border-2 flex justify-between text-sm px-2">
+            <div className="flex items-center">
+              Nginx状态:
+              <NginxStatus />
+            </div>
+            <div>
+              <span>NginxMaster v{version}</span>
+              <span className="ml-6">
+                Provided By{" "}
+                <a
+                  href="https://pch18.cn/archives/529.html"
+                  className="underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Pch18.cn
+                </a>
+              </span>
+            </div>
           </Layout.Footer>
         </Layout.Content>
       </Layout>

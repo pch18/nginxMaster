@@ -16,13 +16,14 @@ copy ./web/dist /nginx_master_web
 copy ./entrypoint /nginx_master_entrypoint
 copy ./nginx.conf /etc/nginx/nginx.conf
 
-run mkdir -p /nginx_master/servers \
+run mkdir -p /nginx_logs \
+    && mkdir -p /nginx_master/servers \
     && mkdir -p /nginx_master/certs \
-    && mkdir -p /nginx_master/logs \
     && chmod -R 755 /nginx_master /nginx_master_web /nginx_master_app /nginx_master_entrypoint
 
 workdir /nginx_master
 volume /nginx_master
+volume /nginx_logs
 
 entrypoint ["/nginx_master_entrypoint"]
 cmd []

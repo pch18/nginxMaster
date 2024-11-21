@@ -83,7 +83,7 @@ export const request = {
   },
 
   nginxStatus: async () => {
-    return await customFetch<{ running: boolean }>(
+    return await customFetch<{ ok: boolean; err?: string }>(
       `${baseUrl}/nginx_status`,
       {}
     );
@@ -98,11 +98,6 @@ export const request = {
 
   nginxLogs: async () => {
     const sse = new EventSource(`${baseUrl}/nginx_logs`);
-    // sse.addEventListener
-    // return await customFetch<{ err?: string; output: string }>(
-    //   `${baseUrl}/nginx_logs`,
-    //   {}
-    // );
     return sse;
   },
 };

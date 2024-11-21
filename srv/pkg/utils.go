@@ -1,7 +1,6 @@
 package pkg
 
 import (
-	"fmt"
 	"io"
 	"os"
 )
@@ -21,45 +20,57 @@ func WriteFile(path string, content []byte) error {
 	return nil
 }
 
-func ReadLastNLines(file *os.File, n int) (lines []string, fileSize int64, err error) {
+// 读取最后 N 行（最后一个 \n 往前查找，确保获取的是完整行）
+func ReadLastNLines(file *os.File, n int) (lines []string, endPos int64, err error) {
 	fileInfo, err := file.Stat()
 	if err != nil {
 		return
 	}
-	fileSize = fileInfo.Size()
+	fileSize := fileInfo.Size()
 
 	char := make([]byte, 1)
-	pos := fileSize - 1
 	var line []byte
+	pos := fileSize
+	endPos = pos
+	var foundEndPos bool
 
 	for {
+		pos--
+
 		_, err = file.Seek(pos, io.SeekStart)
 		if err == nil {
 			_, err = file.Read(char)
 		}
+
 		if char[0] == '\n' || err != nil {
-			fmt.Println(fileSize, pos)
-			if len(line) != 0 {
-				fmt.Println("new line", string(line))
-				lines = append([]string{string(line)}, lines...)
+			if !foundEndPos {
+				foundEndPos = true
+				endPos = pos + 1
+			} else {
+				if len(line) != 0 {
+					lines = append([]string{string(line)}, lines...)
+					if len(lines) == n {
+						return
+					}
+				}
 			}
 			line = nil
-			if err != nil || len(lines) == n {
-				fmt.Println("end lines", lines)
+			// 到头退出
+			if err != nil {
 				return
 			}
 		} else {
 			line = append([]byte{char[0]}, line...)
-			fmt.Println("new char", string(char[0]))
 		}
-		pos--
 	}
 }
 
-func ReadStartPos(file *os.File, startPos int64) (lines []string, endPos int64, err error) {
+// 从指定位置，读取到最后一个 \n 为止, 剩余没有 \n 的部分，留着之后读取
+func ReadLinesStartPos(file *os.File, startPos int64) (lines []string, endPos int64, err error) {
 	char := make([]byte, 1)
 	var line []byte
 	pos := startPos
+	endPos = pos
 
 	for {
 		_, err = file.Seek(pos, io.SeekStart)

@@ -30,19 +30,18 @@ func init() {
 	}
 }
 
-func AuthMiddleWare(ctx *gin.Context) {
-	cookieAuth, err := ctx.Request.Cookie(cookieName)
+func AuthMiddleWare(c *gin.Context) {
+	cookieAuth, err := c.Request.Cookie(cookieName)
 	if err != nil || cookieAuth.Value != CurAuthWithHash {
-		ctx.Status(401)
-		ctx.Abort()
+		c.AbortWithStatus(401)
 		return
 	}
-	SignCookie(ctx, cookieAuth.Value)
-	ctx.Next()
+	SignCookie(c, cookieAuth.Value)
+	c.Next()
 }
 
-func SignCookie(ctx *gin.Context, hash string) {
-	ctx.SetCookie(cookieName, hash, cookieExpire,
+func SignCookie(c *gin.Context, hash string) {
+	c.SetCookie(cookieName, hash, cookieExpire,
 		"/", "", false, true)
 }
 

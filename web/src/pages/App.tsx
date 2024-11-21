@@ -7,6 +7,7 @@ import { HoxRoot } from "hox";
 import Login from "./Login";
 import { useDarkMode } from "@/common/useDarkMode";
 import { useLayoutEffect } from "react";
+import Dash from "./Dash";
 
 const router = createBrowserRouter([
   {
@@ -18,19 +19,19 @@ const router = createBrowserRouter([
     element: (
       <RouterLayout
         menuItems={[
-          // { path: "/", name: "概览" },
-          { path: "/", name: "站点" },
+          { path: "/", name: "概览" },
+          { path: "/site", name: "站点" },
           { path: "/cert", name: "证书" },
         ]}
       />
     ),
     children: [
-      // {
-      //   path: "/",
-      //   element: <Home />,
-      // },
       {
         path: "/",
+        element: <Dash />,
+      },
+      {
+        path: "/site",
         element: <Site />,
       },
       {
