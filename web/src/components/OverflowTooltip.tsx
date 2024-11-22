@@ -1,4 +1,4 @@
-import { Tooltip } from "@arco-design/web-react";
+import { Popover, Tooltip } from "@arco-design/web-react";
 import React, { useRef, type CSSProperties, useState } from "react";
 import styled from "styled-components";
 
@@ -19,7 +19,6 @@ export const OverflowTooltip: React.FC<OverflowTooltipProps> = (props) => {
     style,
     tooltipStyle = {},
     children,
-    line = 1,
     tooltipContent,
     ...divProps
   } = props;
@@ -30,8 +29,7 @@ export const OverflowTooltip: React.FC<OverflowTooltipProps> = (props) => {
   const updateShowTooltip = () => {
     setShowTooltip(
       childRef.current
-        ? childRef.current.clientWidth < childRef.current.scrollWidth ||
-            childRef.current.clientHeight < childRef.current.scrollHeight
+        ? childRef.current.clientWidth < childRef.current.scrollWidth
         : false
     );
   };
@@ -42,13 +40,11 @@ export const OverflowTooltip: React.FC<OverflowTooltipProps> = (props) => {
       triggerProps={{ autoFitPosition: true }}
       content={tooltipContent || children}
       popupVisible={showTooltip}
-      color="#fff"
     >
       <WrapperMainDiv
         {...divProps}
         style={style}
         className={className}
-        $line={line}
         ref={childRef}
         onMouseEnter={updateShowTooltip}
         onMouseLeave={() => {
@@ -61,20 +57,17 @@ export const OverflowTooltip: React.FC<OverflowTooltipProps> = (props) => {
   );
 };
 
-const WrapperMainDiv = styled.div<{ $line: number }>`
+const WrapperMainDiv = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-line-clamp: ${(p) => p.$line};
-  display: -webkit-box;
   -webkit-box-orient: vertical;
   word-break: break-all;
 `;
 
-const WrapperTooltip = styled(Tooltip)`
+const WrapperTooltip = styled(Popover)`
   .arco-tooltip-content-top,
   .arco-tooltip-content-inner {
     width: fit-content;
     word-break: break-all;
-    color: var(--text-color-text-1);
   }
 `;

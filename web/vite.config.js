@@ -11,7 +11,7 @@ export default defineConfig({
       babel: {
         plugins: [
           "babel-plugin-styled-windicss",
-          "babel-plugin-styled-components",
+          // "babel-plugin-styled-components",
         ],
       },
     }),
@@ -19,11 +19,20 @@ export default defineConfig({
   ],
   server: {
     host: "0.0.0.0", // 允许所有 IP 访问
+
     proxy: {
       "/api": {
         target: "http://127.0.0.1:9999",
         changeOrigin: true,
         secure: false, // 忽略 SSL 证书验证
+        configure: (proxy, options) => {
+          // proxy 是 'http-proxy' 的实例
+          proxy.on("proxyReq", (proxyReq, req, res) => {
+            res.on("close", () => {
+              if (!res.finished) proxyReq.destroy();
+            });
+          });
+        },
       },
     },
   },

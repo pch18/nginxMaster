@@ -19,20 +19,20 @@ const router = createBrowserRouter([
     element: (
       <RouterLayout
         menuItems={[
-          { path: "/", name: "概览" },
-          { path: "/site", name: "站点" },
+          { path: "/", name: "站点" },
           { path: "/cert", name: "证书" },
+          { path: "/dash", name: "日志" },
         ]}
       />
     ),
     children: [
       {
         path: "/",
-        element: <Dash />,
+        element: <Site />,
       },
       {
-        path: "/site",
-        element: <Site />,
+        path: "/dash",
+        element: <Dash />,
       },
       {
         path: "/cert",

@@ -1,6 +1,6 @@
 import { request } from "@/utils/request";
 import { useRequest } from "ahooks";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { createGlobalStore } from "hox";
 
 export const [useSiteList] = createGlobalStore(() => {

@@ -11,8 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const LogFileHistoryLines = 100
-
 func NginxLogs(c *gin.Context) {
 	c.Writer.Header().Set("Content-Type", "text/event-stream")
 	c.Writer.Header().Set("Cache-Control", "no-cache")
@@ -38,7 +36,6 @@ func NginxLogs(c *gin.Context) {
 	}
 	defer file.Close()
 
-	var lines []string
 	var pos int64
 	lastCur := c.GetHeader("last-event-id")
 	if lastCur != "" {
@@ -47,20 +44,53 @@ func NginxLogs(c *gin.Context) {
 			c.AbortWithStatus(500)
 			return
 		}
-		lines, pos, _ = pkg.ReadLinesStartPos(file, pos)
+		pos, err = pkg.ReadLinesAfterPos(c.Request.Context(), file, pos, 10000, func(l []byte, p int64) {
+			c.Writer.WriteString("id: ")
+			c.Writer.WriteString(strconv.FormatInt(p, 10))
+			c.Writer.Write([]byte{'\n'})
+			c.Writer.WriteString("data: ")
+			c.Writer.Write(l)
+			c.Writer.Write([]byte{'\n'})
+			c.Writer.Write([]byte{'\n'})
+			c.Writer.Flush()
+		})
+		if err != nil {
+			c.AbortWithStatus(500)
+			return
+		}
 	} else {
-		lines, pos, _ = pkg.ReadLastNLines(file, LogFileHistoryLines)
-	}
+		lineCount := int64(200)
+		lineCountStr := c.Query("n")
+		if lineCountStr != "" {
+			lineCount, err = strconv.ParseInt(lineCountStr, 10, 0)
+			if err != nil {
+				c.AbortWithStatus(500)
+				return
+			}
+		}
 
-	for _, line := range lines {
-		c.Writer.WriteString("data: ")
-		c.Writer.WriteString(line)
-		c.Writer.WriteString("\n\n")
+		fileInfo, err := file.Stat()
+		if err != nil {
+			c.AbortWithStatus(500)
+			return
+		}
+		pos = fileInfo.Size() - 1
+
+		pos, err = pkg.ReadLinesBeforePos(c.Request.Context(), file, pos, lineCount, func(l []byte, p int64) {
+			c.Writer.WriteString("id: @")
+			c.Writer.WriteString(strconv.FormatInt(pos, 10))
+			c.Writer.Write([]byte{'\n'})
+			c.Writer.WriteString("data: ")
+			c.Writer.Write(l)
+			c.Writer.Write([]byte{'\n'})
+			c.Writer.Write([]byte{'\n'})
+			c.Writer.Flush()
+		})
+		if err != nil {
+			c.AbortWithStatus(500)
+			return
+		}
 	}
-	c.Writer.WriteString("id: ")
-	c.Writer.WriteString(strconv.FormatInt(pos, 10))
-	c.Writer.WriteString("\n\n")
-	c.Writer.Flush()
 
 	defer func() {
 		log.Println("NginxLogs disconnected")
@@ -75,16 +105,19 @@ func NginxLogs(c *gin.Context) {
 				return
 			}
 			if event.Op&fsnotify.Write == fsnotify.Write {
-				lines, pos, _ = pkg.ReadLinesStartPos(file, pos)
-				for _, line := range lines {
+				pos, err = pkg.ReadLinesAfterPos(c.Request.Context(), file, pos, 10000, func(l []byte, p int64) {
+					c.Writer.WriteString("id: ")
+					c.Writer.WriteString(strconv.FormatInt(pos, 10))
+					c.Writer.Write([]byte{'\n'})
 					c.Writer.WriteString("data: ")
-					c.Writer.WriteString(line)
-					c.Writer.WriteString("\n\n")
+					c.Writer.Write(l)
+					c.Writer.Write([]byte{'\n'})
+					c.Writer.Write([]byte{'\n'})
+					c.Writer.Flush()
+				})
+				if err != nil {
+					return
 				}
-				c.Writer.WriteString("id: ")
-				c.Writer.WriteString(strconv.FormatInt(pos, 10))
-				c.Writer.WriteString("\n\n")
-				c.Writer.Flush()
 			}
 		case _, ok := <-watcher.Errors:
 			if !ok {

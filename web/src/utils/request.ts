@@ -96,7 +96,7 @@ export const request = {
     );
   },
 
-  nginxLogs: async () => {
+  nginxLogs: () => {
     const sse = new EventSource(`${baseUrl}/nginx_logs`);
     return sse;
   },
