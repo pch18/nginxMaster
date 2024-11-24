@@ -18,14 +18,14 @@ export const GraphNet: FC<{ sysList: SysInfo[] }> = ({ sysList }) => {
       },
       formatter: function (params: any) {
         const ns = params.find((item: any) => item.seriesIndex === 0);
-        const t1 = `${ns.marker} ${ns.seriesName}: ${formatBytes(
+        const t1 = `${ns.marker} ${ns.seriesName}：${formatBytes(
           ns.value
-        )}  (总${formatBytes(sysList[ns.dataIndex]?.ns || 0)})`;
+        )}  （总 ${formatBytes(sysList[ns.dataIndex]?.ns || 0)}）`;
 
         const nr = params.find((item: any) => item.seriesIndex === 1);
-        const t2 = `${nr.marker} ${nr.seriesName}: ${formatBytes(
+        const t2 = `${nr.marker} ${nr.seriesName}：${formatBytes(
           nr.value
-        )}  (总${formatBytes(sysList[nr.dataIndex]?.nr || 0)})`;
+        )}  （总 ${formatBytes(sysList[nr.dataIndex]?.nr || 0)}）`;
 
         return `${params[0].axisValueLabel}<br/>${t1}<br/>${t2}`;
       },

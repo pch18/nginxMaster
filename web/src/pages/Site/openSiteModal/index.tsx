@@ -19,9 +19,9 @@ import { useMemo } from "react";
 import { actionNotification } from "@/common/actionNotification";
 
 export const openSiteModal = createNiceModal<
-  { serverConfig?: ServerConfig },
+  { serverConfig?: ServerConfig; title: string },
   { serverConfig?: ServerConfig }
->(({ _modal, serverConfig }) => {
+>(({ _modal, serverConfig, title }) => {
   const initServerConfig = useMemo(() => {
     return serverConfig ?? newServerConfig();
   }, []);
@@ -31,6 +31,13 @@ export const openSiteModal = createNiceModal<
     <Modal
       {..._modal.props}
       maskClosable={false}
+      title={
+        <span>
+          <span>{title || "站点信息"} </span>
+          <span className="select-text">{initServerConfig.id}</span>
+        </span>
+      }
+      className="min-w-[820px] max-w-[1280px] !w-[85vw]"
       footer={
         <Space size="medium">
           {serverConfig && (
@@ -113,13 +120,6 @@ export const openSiteModal = createNiceModal<
           </AsyncButton>
         </Space>
       }
-      title={
-        <span>
-          <span>站点信息 </span>
-          <span className="select-text">{initServerConfig.id}</span>
-        </span>
-      }
-      className="min-w-[820px] max-w-[1280px] !w-[85vw]"
     >
       <Form
         form={formIns}

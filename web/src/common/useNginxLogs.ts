@@ -137,11 +137,14 @@ const parseLog = (raw: string): NginxLog => {
   const protocol = !rs[7] || rs[7] === "-" ? "" : rs[7];
   const status = Number(rs[8]) || 0;
   const reqTime = Number(rs[9]) || 0;
-  const reqTimeStr = `${reqTime.toFixed(1)}s`;
+  const reqTimeStr =
+    reqTime < 1
+      ? `${(reqTime * 1000).toFixed(0)} ms`
+      : `${reqTime.toFixed(reqTime < 10 ? 2 : reqTime < 100 ? 1 : 0)} s`;
   const reqLen = Number(rs[10]) || 0;
-  const reqLenStr = formatBytes(reqLen);
+  const reqLenStr = formatBytes(reqLen, true);
   const respLen = Number(rs[11]) || 0;
-  const respLenStr = formatBytes(respLen);
+  const respLenStr = formatBytes(respLen, true);
   const referer = !rs[12] || rs[12] === "-" ? "" : rs[12];
   const ua = !rs[13] || rs[13] === "-" ? "" : rs[13];
   const remoteAddr = !rs[14] || rs[14] === "-" ? "" : rs[14];
@@ -183,28 +186,4 @@ const parseLog = (raw: string): NginxLog => {
     timeStr,
     fullUrl,
   };
-  // return {
-  //   pos: rs[0]!,
-  //   method: !method || method === "-" ? "" : method,
-  //   schema: schema === "-" ? "" : schema,
-  //   host: host === "-" ? "" : host,
-  //   port: Number(port) || 0,
-  //   uri: uri === "-" ? "/" : uri,
-  //   url: _url,
-  //   args: args === "-" ? "" : args,
-  //   protocol: protocol === "-" ? "" : protocol,
-  //   status: Number(status) || 0,
-  //   reqTime: _reqTime,
-  //   reqTimeStr: `${_reqTime.toFixed(1)}s`,
-  //   reqLen: _reqLen,
-  //   reqLenStr: formatBytes(_reqLen),
-  //   respLen: _respLen,
-  //   respLenStr: formatBytes(_respLen),
-  //   referer: referer === "-" ? "" : referer,
-  //   ua: ua === "-" ? "" : ua,
-  //   remoteAddr: remoteAddr === "-" ? "" : remoteAddr,
-  //   xff: xff === "-" ? "" : xff,
-  //   time: _time,
-  //   timeStr: _time.toLocaleString(),
-  // };
 };

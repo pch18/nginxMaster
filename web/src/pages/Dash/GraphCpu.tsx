@@ -19,13 +19,13 @@ export const GraphCpu: FC<{ sysList: SysInfo[] }> = ({ sysList }) => {
       // valueFormatter: console.log, // formatBytes,
       formatter: function (params: any) {
         const mu = params.find((item: any) => item.seriesIndex === 0);
-        const t1 = `${mu.marker} ${mu.seriesName}: ${formatBytes(mu.value)}`;
+        const t1 = `${mu.marker} ${mu.seriesName}：${formatBytes(mu.value)}`;
 
         const mt = params.find((item: any) => item.seriesIndex === 1);
-        const t2 = `${mt.marker} ${mt.seriesName}: ${formatBytes(mt.value)}`;
+        const t2 = `${mt.marker} ${mt.seriesName}：${formatBytes(mt.value)}`;
 
         const cp = params.find((item: any) => item.seriesIndex === 2);
-        const t3 = `${cp.marker} ${cp.seriesName}: ${cp.value.toFixed(1)}%`;
+        const t3 = `${cp.marker} ${cp.seriesName}：${cp.value.toFixed(1)} %`;
 
         return `${params[0].axisValueLabel}<br/>${t3}<br/>${t1}<br/>${t2}`;
       },
@@ -53,7 +53,7 @@ export const GraphCpu: FC<{ sysList: SysInfo[] }> = ({ sysList }) => {
         splitNumber: 5,
         interval: 20,
         axisLabel: {
-          formatter: (v: number) => `${Math.round(v)}%`,
+          formatter: (v: number) => `${Math.round(v)} %`,
         },
       },
     ],

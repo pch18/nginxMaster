@@ -8,6 +8,11 @@ import Login from "./Login";
 import { useDarkMode } from "@/common/useDarkMode";
 import { useLayoutEffect } from "react";
 import Dash from "./Dash";
+import {
+  IconCompass,
+  IconDashboard,
+  IconLock,
+} from "@arco-design/web-react/icon";
 
 const router = createBrowserRouter([
   {
@@ -19,9 +24,13 @@ const router = createBrowserRouter([
     element: (
       <RouterLayout
         menuItems={[
-          { path: "/", name: "站点" },
-          { path: "/cert", name: "证书" },
-          { path: "/dash", name: "日志" },
+          { path: "/", name: "站点", icon: <IconCompass className="!mr-2" /> },
+          { path: "/cert", name: "证书", icon: <IconLock className="!mr-2" /> },
+          {
+            path: "/dash",
+            name: "日志",
+            icon: <IconDashboard className="!mr-2" />,
+          },
         ]}
       />
     ),

@@ -47,6 +47,7 @@ func main() {
 	apiRouter.POST("/set_auth", ctl.SetAuth)
 	apiRouter.POST("/nginx_status", ctl.NginxStatus)
 	apiRouter.POST("/nginx_start", ctl.NginxStart)
+	apiRouter.POST("/nginx_reload", ctl.NginxReload)
 	apiRouter.GET("/nginx_logs", ctl.NginxLogs)
 
 	apiRouter.POST("/get_sys", ctl.GetSys)

@@ -40,6 +40,7 @@ export const useColumns = (
               .filter((d) => d)
               .map((d, i) => (
                 <Link
+                  className="whitespace-nowrap"
                   key={i}
                   href={
                     s.sslEn
@@ -111,7 +112,7 @@ export const useColumns = (
             <Button
               type="outline"
               onClick={() => {
-                void openSiteModal({ serverConfig: s }).then(
+                void openSiteModal({ serverConfig: s, title: "编辑站点" }).then(
                   ({ serverConfig }) => {
                     if (serverConfig) {
                       mutate((s1) =>
@@ -131,6 +132,7 @@ export const useColumns = (
               onClick={() => {
                 void openSiteModal({
                   serverConfig: { ...s, id: makeId(), domains: [] },
+                  title: "克隆站点",
                 }).then(({ serverConfig }) => {
                   if (serverConfig) {
                     mutate((s) => [...(s ?? []), serverConfig]);

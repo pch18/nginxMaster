@@ -1,7 +1,6 @@
 package ctl
 
 import (
-	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -114,7 +113,6 @@ func GetSys(c *gin.Context) {
 	}
 
 	list, total := SearchFromSysHistory(int64(lastTime))
-	fmt.Println(list)
 
 	c.JSON(http.StatusOK, gin.H{
 		"list":  list,

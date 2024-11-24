@@ -63,7 +63,7 @@ export const RouterLayout: React.FC<{
 
       {/* // arco-layout-has-sider 是为了避免框架无效重渲染，导致第一次content区域渲染宽度没有减去sider, 会导致 echart 首次加载时宽度异常 */}
       <Layout className="overflow-hidden arco-layout-has-sider">
-        <Layout.Sider width={120}>
+        <Layout.Sider width={100}>
           <Menu selectedKeys={openMenu ? [openMenu.path] : []}>
             {menuItems.map((item) => (
               <Link to={item.link ?? item.path} key={item.path}>

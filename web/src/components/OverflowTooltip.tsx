@@ -14,13 +14,19 @@ export const OverflowTooltip: React.FC<{
     const childRef = useRef<HTMLDivElement>(null);
 
     const [showTooltip, setShowTooltip] = useState(false);
-
+    const timerRef = useRef<number>();
     const updateShowTooltip = () => {
-      setShowTooltip(
-        childRef.current
-          ? childRef.current.clientWidth < childRef.current.scrollWidth
-          : false
-      );
+      const show = childRef.current
+        ? childRef.current.clientWidth < childRef.current.scrollWidth
+        : false;
+      if (show) {
+        timerRef.current = setTimeout(() => {
+          const show = childRef.current
+            ? childRef.current.clientWidth < childRef.current.scrollWidth
+            : false;
+          setShowTooltip(show);
+        }, 100);
+      }
     };
 
     return (
@@ -29,12 +35,14 @@ export const OverflowTooltip: React.FC<{
         triggerProps={{ autoFitPosition: true }}
         content={children}
         popupVisible={showTooltip}
+        // getPopupContainer={() => document.body}
       >
         <WrapperMainDiv
           className={className}
           ref={childRef}
           onMouseEnter={updateShowTooltip}
           onMouseLeave={() => {
+            clearTimeout(timerRef.current);
             setShowTooltip(false);
           }}
         >

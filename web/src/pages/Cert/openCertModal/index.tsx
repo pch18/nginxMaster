@@ -10,9 +10,9 @@ import { useMemo } from "react";
 import { actionNotification } from "@/common/actionNotification";
 
 export const openCertModal = createNiceModal<
-  { certConfig?: CertConfig },
+  { certConfig?: CertConfig; title: string },
   { certConfig?: CertConfig }
->(({ _modal, certConfig }) => {
+>(({ _modal, certConfig, title }) => {
   const initCertConfig = useMemo(() => {
     return certConfig ?? newCertConfig();
   }, []);
@@ -22,6 +22,13 @@ export const openCertModal = createNiceModal<
     <Modal
       {..._modal.props}
       maskClosable={false}
+      title={
+        <span>
+          <span>{title || "证书信息"} </span>
+          <span className="select-text">{initCertConfig.id}</span>
+        </span>
+      }
+      className="min-w-[650px] max-w-[1024px] !w-[65vw]"
       footer={
         <Space size="medium">
           {certConfig && (
@@ -57,13 +64,6 @@ export const openCertModal = createNiceModal<
           </AsyncButton>
         </Space>
       }
-      title={
-        <span>
-          <span>证书信息 </span>
-          <span className="select-text">{initCertConfig.id}</span>
-        </span>
-      }
-      className="min-w-[650px] max-w-[1024px] !w-[65vw]"
     >
       <FormContext formIns={formIns} initCertConfig={initCertConfig} />
     </Modal>

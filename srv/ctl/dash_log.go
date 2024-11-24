@@ -158,3 +158,17 @@ func NginxStart(c *gin.Context) {
 		"output": output,
 	})
 }
+
+func NginxReload(c *gin.Context) {
+	output, err := pkg.NginxReload()
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"err":    "NginxReload Failed",
+			"output": output,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"output": output,
+	})
+}

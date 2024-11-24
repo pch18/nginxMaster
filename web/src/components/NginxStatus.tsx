@@ -9,23 +9,37 @@ export const NginxStatus = () => {
     pollingInterval: 10000,
   });
   if (loading) {
-    return <Spin loading={loading} className="ml-5 h-5 overflow-hidden" />;
+    return <Spin loading={loading} className="h-5 pl-7 overflow-hidden w-36" />;
   }
 
   return (
-    <div className="h-5 overflow-hidden">
+    <div className="h-5 overflow-hidden w-36">
       {data?.ok ? (
-        <Tag color="green" size="small" className="ml-2">
-          运行中
-        </Tag>
-      ) : data?.err ? (
-        <Tag color="orange" size="small" className="ml-2">
-          异常
-        </Tag>
+        <>
+          <Tag color="green" size="small" className="ml-2">
+            运行中
+          </Tag>
+          <AsyncButton
+            size="mini"
+            type="text"
+            className="!py-0 !px-2 !h-full"
+            onClick={async () => {
+              const res = await request.nginxReload();
+              actionNotification(res.err, res.output);
+              void refreshAsync();
+            }}
+          >
+            重载配置
+          </AsyncButton>
+        </>
       ) : (
         <>
-          <Tag color="red" size="small" className="ml-2">
-            停止
+          <Tag
+            color={data?.err ? "orange" : "red"}
+            size="small"
+            className="ml-2"
+          >
+            {data?.err ? "异常" : "停止"}
           </Tag>
           <AsyncButton
             size="mini"
@@ -33,11 +47,8 @@ export const NginxStatus = () => {
             className="!py-0 !px-2 !h-full"
             onClick={async () => {
               const res = await request.nginxStart();
-              if (res.err) {
-                actionNotification(res.err, res.output);
-              } else {
-                await refreshAsync();
-              }
+              actionNotification(res.err, res.output);
+              void refreshAsync();
             }}
           >
             立即启动
