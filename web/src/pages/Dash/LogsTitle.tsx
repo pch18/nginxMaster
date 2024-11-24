@@ -43,7 +43,7 @@ export const LogsTitle: FC<{ className?: string }> = ({ className = "" }) => {
           }
         `}
       >
-        <Form.Item label="域名" field="host" className="flex-[2]">
+        <Form.Item label="域名" field="hosts" className="flex-[2]">
           <Select
             options={siteOptions}
             mode="multiple"

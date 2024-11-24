@@ -12,9 +12,11 @@ export default function () {
   const [siteSearch, setSiteSearch] = useState("");
   const filteredList = useMemo(() => {
     if (!siteSearch) return sortedList;
+    const lowerSiteSearch = siteSearch.trim().toLowerCase();
+
     return sortedList.filter(
       (li) =>
-        li.domains.some((l) => l.includes(siteSearch)) ||
+        li.domains.some((l) => l.toLowerCase().includes(lowerSiteSearch)) ||
         li.id.includes(siteSearch)
     );
   }, [sortedList, siteSearch]);

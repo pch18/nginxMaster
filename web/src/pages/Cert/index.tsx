@@ -12,11 +12,13 @@ export default function () {
   const [certSearch, setCertSearch] = useState("");
   const filteredList = useMemo(() => {
     if (!certSearch) return sortedList;
+    const lowerCertSearch = certSearch.trim().toLowerCase();
+
     return sortedList.filter(
       (li) =>
-        li.name.includes(certSearch) ||
-        li.domain.includes(certSearch) ||
-        li.id.includes(certSearch)
+        li.name.toLowerCase().includes(lowerCertSearch) ||
+        li.domain.toLowerCase().includes(lowerCertSearch) ||
+        li.id.includes(lowerCertSearch)
     );
   }, [sortedList, certSearch]);
 

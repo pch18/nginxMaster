@@ -5,21 +5,31 @@ import { useRef, useState } from "react";
 import { formatBytes } from "./utils";
 
 interface SearchRule {
-  host?: string[];
+  hosts?: string[];
   method?: string;
   status?: string;
   fromIP?: string;
   ref_ua?: string;
 }
 
+const ruleFormat = (rule: SearchRule): SearchRule => {
+  return {
+    hosts: rule?.hosts?.map((h) => h.trim().toLowerCase().replaceAll("*", "")),
+    method: rule?.method?.trim().toLowerCase(),
+    status: rule?.status?.trim(),
+    fromIP: rule?.fromIP?.trim(),
+    ref_ua: rule?.ref_ua?.trim().toLowerCase(),
+  };
+};
+
 const checkSearch = (rule: SearchRule, log: NginxLog) => {
   if (
-    rule.host?.length &&
-    !rule.host?.some((h) => log.host.includes(h.replace("*", "")))
+    rule.hosts?.length &&
+    !rule.hosts?.some((h) => log.host.toLowerCase().includes(h))
   ) {
     return false;
   }
-  if (rule.method && rule.method !== log.method) {
+  if (rule.method && rule.method.toLowerCase() !== log.method.toLowerCase()) {
     return false;
   }
   if (rule.status && !log.status.toString().includes(rule.status)) {
@@ -34,8 +44,8 @@ const checkSearch = (rule: SearchRule, log: NginxLog) => {
   }
   if (
     rule.ref_ua &&
-    !log.referer.includes(rule.ref_ua) &&
-    !log.ua.includes(rule.ref_ua)
+    !log.referer.toLowerCase().includes(rule.ref_ua) &&
+    !log.ua.toLowerCase().includes(rule.ref_ua)
   ) {
     return false;
   }
@@ -62,7 +72,8 @@ export const [useNginxLog] = createGlobalStore(() => {
       } else {
         logsRef.current.push(log);
       }
-      if (checkSearch(searchForm.getFields(), log)) {
+      const rule = ruleFormat(searchForm.getFields());
+      if (checkSearch(rule, log)) {
         if (isReverse) {
           setLogs((logs) => [log, ...logs]);
         } else {
@@ -73,7 +84,8 @@ export const [useNginxLog] = createGlobalStore(() => {
   };
 
   const onSearchFormChange = (rules: SearchRule) => {
-    const _logs = logsRef.current.filter((log) => checkSearch(rules, log));
+    const _rules = ruleFormat(rules);
+    const _logs = logsRef.current.filter((log) => checkSearch(_rules, log));
     setLogs(_logs);
   };
 
