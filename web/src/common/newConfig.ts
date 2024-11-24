@@ -30,6 +30,7 @@ export const newServerConfig = (): ServerConfig => {
     sslForceEn: false,
 
     staticCacheEn: true,
+    defaultServerEn: false,
     accessLogOff: false,
     locations: [newLocationConfig()],
   };

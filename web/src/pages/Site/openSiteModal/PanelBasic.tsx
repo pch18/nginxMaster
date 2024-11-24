@@ -125,11 +125,14 @@ export const PanelBasic: FC<{ className?: string; formIns: FormInstance }> = ({
 
       <Form.Item label="其他">
         <div className="flex gap-2">
+          <Form.Item noStyle field="staticCacheEn" triggerPropName="checked">
+            <Checkbox>缓存静态文件</Checkbox>
+          </Form.Item>
           <Form.Item noStyle field="accessLogOff" triggerPropName="checked">
             <Checkbox>关闭日志记录</Checkbox>
           </Form.Item>
-          <Form.Item noStyle field="staticCacheEn" triggerPropName="checked">
-            <Checkbox>缓存静态文件</Checkbox>
+          <Form.Item noStyle field="defaultServerEn" triggerPropName="checked">
+            <Checkbox>设为默认站点</Checkbox>
           </Form.Item>
         </div>
       </Form.Item>

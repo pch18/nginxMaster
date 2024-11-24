@@ -96,8 +96,26 @@ export const request = {
     );
   },
 
-  nginxLogs: () => {
-    const sse = new EventSource(`${baseUrl}/nginx_logs`);
+  nginxLogs: (lineCount: number) => {
+    const sse = new EventSource(`${baseUrl}/nginx_logs?n=${lineCount}`);
     return sse;
   },
+
+  getSys: async (time: number) => {
+    return await customFetch<{ list: SysInfo[]; total: number }>(
+      `${baseUrl}/get_sys`,
+      {
+        time,
+      }
+    );
+  },
 };
+
+export interface SysInfo {
+  t: number;
+  c: number;
+  mu: number;
+  mt: number;
+  ns: number;
+  nr: number;
+}

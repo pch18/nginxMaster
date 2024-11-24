@@ -1,11 +1,12 @@
+import { Graph } from "./Graph";
 import { Logs } from "./Logs";
-import { LogsSearch } from "./LogsSearch";
+import { LogsTitle } from "./LogsTitle";
 
 export default function () {
   return (
-    <div className="p-5 h-full flex flex-col overflow-hidden">
-      <div className="flex-none font-bold text-2xl mb-2">访问日志</div>
-      <LogsSearch />
+    <div className="p-4 h-full flex flex-col overflow-hidden">
+      <Graph />
+      <LogsTitle />
       <Logs className="flex-auto overflow-hidden" />
     </div>
   );

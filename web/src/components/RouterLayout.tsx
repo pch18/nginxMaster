@@ -9,6 +9,7 @@ import { request } from "@/utils/request";
 import { openChangeAuthModal } from "@/common/openChangeAuthModal";
 import { version } from "@/utils/version";
 import { NginxStatus } from "./NginxStatus";
+import { useCertList, useSiteList } from "@/common/useList";
 
 export const RouterLayout: React.FC<{
   menuItems: Array<{
@@ -29,6 +30,8 @@ export const RouterLayout: React.FC<{
   }, [location]);
 
   const [isDark, setIsDark] = useDarkMode();
+  const { sortedList: siteList } = useSiteList();
+  const { sortedList: certList } = useCertList();
 
   return (
     <Layout className="h-full overflow-hidden">
@@ -81,9 +84,13 @@ export const RouterLayout: React.FC<{
           </div>
 
           <Layout.Footer className="border-t border-color-border-2 flex justify-between text-sm px-2">
-            <div className="flex items-center">
-              Nginx状态:
-              <NginxStatus />
+            <div className="flex items-center gap-4">
+              <div className="flex">
+                Nginx状态:
+                <NginxStatus />
+              </div>
+              <div>站点数量:{siteList.length}</div>
+              <div>证书数量:{certList.length}</div>
             </div>
             <div>
               <span>NginxMaster v{version}</span>

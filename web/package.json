@@ -21,7 +21,9 @@
     "react-router-dom": "^7.0.0",
     "styled-components": "^6.1.13",
     "clsx": "^2.1.1",
-    "jsrsasign": "^11.1.0"
+    "jsrsasign": "^11.1.0",
+    "echarts": "^5.5.1",
+    "echarts-for-react": "^3.0.2"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.7",

@@ -22,7 +22,8 @@ func WriteFile(path string, content []byte) error {
 }
 
 // 从指定位置，读取到最后一个 \n 为止, 剩余没有 \n 的部分，留着之后读取
-func ReadLinesAfterPos(ctx context.Context, file *os.File, startPos int64, lineCount int64, onNewLine func(l []byte, p int64)) (endPos int64, err error) {
+func ReadLinesAfterPos(ctx context.Context, file *os.File, startPos int64, lineCount int64, onNewLine func(l []byte, p int64)) (endPos int64) {
+	var err error
 	char := make([]byte, 1)
 	var line []byte
 	pos := startPos
@@ -34,6 +35,8 @@ func ReadLinesAfterPos(ctx context.Context, file *os.File, startPos int64, lineC
 		case <-ctx.Done():
 			return
 		default:
+			pos++
+
 			_, err = file.Seek(pos, io.SeekStart)
 			if err == nil {
 				_, err = file.Read(char)
@@ -41,15 +44,12 @@ func ReadLinesAfterPos(ctx context.Context, file *os.File, startPos int64, lineC
 
 			// After 是读取到结束为止，立刻终止，丢弃最后一个换行符之后的部分
 			if err != nil {
-				if err == io.EOF {
-					err = nil
-				}
 				return
 			}
 
 			// 下一行的首字符
-			pos++
 			if char[0] == '\n' {
+				endPos = pos
 				if len(line) != 0 {
 					onNewLine(line, pos)
 					readLineCount++
@@ -58,8 +58,6 @@ func ReadLinesAfterPos(ctx context.Context, file *os.File, startPos int64, lineC
 					}
 				}
 				line = nil
-				endPos = pos
-
 			} else {
 				line = append(line, char[0])
 			}
@@ -67,29 +65,45 @@ func ReadLinesAfterPos(ctx context.Context, file *os.File, startPos int64, lineC
 	}
 }
 
+func SeekBackToLastLine(file *os.File, startPos int64) (endPos int64) {
+	var err error
+	char := make([]byte, 1)
+	pos := startPos
+
+	for {
+		_, err = file.Seek(pos, io.SeekStart)
+		if err == nil {
+			_, err = file.Read(char)
+		}
+		if char[0] == '\n' || err != nil {
+			return pos
+		}
+		pos--
+	}
+}
+
 // 读取最后 N 行, 和上一个不一样是：endPos 是上一个最近换行符，并且丢弃到上一个换行符之间的内容
-func ReadLinesBeforePos(ctx context.Context, file *os.File, startPos int64, lineCount int64, onNewLine func(l []byte, p int64)) (endPos int64, err error) {
+func ReadLinesBeforePos(ctx context.Context, file *os.File, startPos int64, lineCount int64, onNewLine func(l []byte, p int64)) {
+	var err error
 	char := make([]byte, 1)
 	var line []byte
 	pos := startPos
-	endPos = pos
 	readLineCount := int64(0)
-	foundLastLine := false
 
 	for {
 		select {
 		case <-ctx.Done():
 			return
 		default:
+			pos--
+
 			_, err = file.Seek(pos, io.SeekStart)
 			if err == nil {
 				_, err = file.Read(char)
 			}
 
-			// 上一行的尾字符
-			pos--
 			if char[0] == '\n' || err != nil {
-				if len(line) != 0 && foundLastLine {
+				if len(line) != 0 {
 					reverseBytes(line)
 					onNewLine(line, pos)
 					readLineCount++
@@ -99,16 +113,7 @@ func ReadLinesBeforePos(ctx context.Context, file *os.File, startPos int64, line
 				}
 				line = nil
 
-				if !foundLastLine {
-					foundLastLine = true
-					endPos = pos + 2
-				}
-
-				// Before 是向前读到头，保留到头之间所有内容
 				if err != nil {
-					if err == io.EOF {
-						err = nil
-					}
 					return
 				}
 

@@ -14,26 +14,27 @@ func main() {
 	router := gin.Default()
 
 	router.Use(func(c *gin.Context) {
-		if c.Request.URL.Path[:4] == "/api" {
+		if len(c.Request.URL.Path) >= 4 && c.Request.URL.Path[:4] == "/api" {
 			c.Next()
 			return
 		}
 
 		path := filepath.Join(pkg.WebDir, filepath.Clean(c.Request.URL.Path))
 		if _, err := filepath.Rel(pkg.WebDir, path); err == nil {
-			if _, err := os.Stat(path); os.IsNotExist(err) {
+			if _, err := os.Stat(path); err == nil {
 				c.File(path)
+				return
 			}
 		}
-		c.File(pkg.WebDir + "/index.html")
 
+		c.File(pkg.WebDir + "/index.html")
 	})
 
 	router.POST("/api/v1/login", ctl.Login)
 	router.POST("/api/v1/logout", ctl.Logout)
 
 	apiRouter := router.Group("/api/v1/")
-	// apiRouter.Use(pkg.AuthMiddleWare)
+	apiRouter.Use(pkg.AuthMiddleWare)
 
 	apiRouter.POST("/list_site", ctl.ListSite)
 	apiRouter.POST("/save_site", ctl.SaveSite)
@@ -47,6 +48,8 @@ func main() {
 	apiRouter.POST("/nginx_status", ctl.NginxStatus)
 	apiRouter.POST("/nginx_start", ctl.NginxStart)
 	apiRouter.GET("/nginx_logs", ctl.NginxLogs)
+
+	apiRouter.POST("/get_sys", ctl.GetSys)
 
 	// 启动 HTTP 服务，监听在 8080 端口
 	router.Run(":9999")
