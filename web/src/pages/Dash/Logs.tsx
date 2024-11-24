@@ -60,10 +60,30 @@ export const Logs: FC<{ className?: string }> = ({ className = "" }) => {
               <OverflowTooltip className="cell !flex-[3]">
                 {data.fullUrl}
               </OverflowTooltip>
-              <div className="cell w-[38px] text-right">{data.status}</div>
-              <div className="cell w-[54px] text-right">{data.reqTimeStr}</div>
-              <div className="cell w-[68px] text-right">{data.reqLenStr}</div>
-              <div className="cell w-[68px] text-right">{data.respLenStr}</div>
+              <div
+                className="cell w-[38px] text-right"
+                style={{ color: data.statusCor }}
+              >
+                {data.status}
+              </div>
+              <div
+                className="cell w-[54px] text-right"
+                style={{ color: data.reqTimeCor }}
+              >
+                {data.reqTimeStr}
+              </div>
+              <div
+                className="cell w-[68px] text-right"
+                style={{ color: data.reqLenCor }}
+              >
+                {data.reqLenStr}
+              </div>
+              <div
+                className="cell w-[68px] text-right"
+                style={{ color: data.respLenCor }}
+              >
+                {data.respLenStr}
+              </div>
               <OverflowTooltip className="cell !flex-[1] min-w-[120px]">
                 {data.remoteAddr}
                 {data.xff ? ` [${data.xff}]` : ""}

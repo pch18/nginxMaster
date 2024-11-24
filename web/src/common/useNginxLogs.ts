@@ -103,6 +103,10 @@ interface NginxLog {
   time: Date;
   timeStr: string;
   fullUrl: string;
+  statusCor: string;
+  reqTimeCor: string;
+  reqLenCor: string;
+  respLenCor: string;
 }
 
 const parseLog = (raw: string): NginxLog => {
@@ -136,15 +140,39 @@ const parseLog = (raw: string): NginxLog => {
   const args = !rs[6] || rs[6] === "-" ? "" : rs[6];
   const protocol = !rs[7] || rs[7] === "-" ? "" : rs[7];
   const status = Number(rs[8]) || 0;
+  const statusCor =
+    status >= 200 && status < 300
+      ? "var(--color-ok)"
+      : status >= 300 && status < 400
+      ? "var(--color-warm)"
+      : "var(--color-err)";
   const reqTime = Number(rs[9]) || 0;
   const reqTimeStr =
     reqTime < 1
       ? `${(reqTime * 1000).toFixed(0)} ms`
       : `${reqTime.toFixed(reqTime < 10 ? 2 : reqTime < 100 ? 1 : 0)} s`;
+  const reqTimeCor =
+    reqTime < 0.2
+      ? "var(--color-ok)"
+      : reqTime < 1
+      ? "var(--color-warm)"
+      : "var(--color-err)";
   const reqLen = Number(rs[10]) || 0;
-  const reqLenStr = formatBytes(reqLen, true);
+  const reqLenStr = formatBytes(reqLen);
+  const reqLenCor =
+    reqLen < 204800
+      ? "var(--color-ok)"
+      : reqLen < 1048576
+      ? "var(--color-warm)"
+      : "var(--color-err)";
   const respLen = Number(rs[11]) || 0;
-  const respLenStr = formatBytes(respLen, true);
+  const respLenStr = formatBytes(respLen);
+  const respLenCor =
+    respLen < 204800
+      ? "var(--color-ok)"
+      : respLen < 1048576
+      ? "var(--color-warm)"
+      : "var(--color-err)";
   const referer = !rs[12] || rs[12] === "-" ? "" : rs[12];
   const ua = !rs[13] || rs[13] === "-" ? "" : rs[13];
   const remoteAddr = !rs[14] || rs[14] === "-" ? "" : rs[14];
@@ -185,5 +213,9 @@ const parseLog = (raw: string): NginxLog => {
     time,
     timeStr,
     fullUrl,
+    statusCor,
+    reqTimeCor,
+    reqLenCor,
+    respLenCor,
   };
 };
