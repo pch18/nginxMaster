@@ -10,20 +10,19 @@ run go build -o /app-bin .
 # from nginx:stable-alpine
 from nginx:stable-alpine-perl
 
-copy --from=builder /app-bin /nginx_master_app
+env TZ=Asia/Shanghai
+
+copy ./nginx.conf /etc/nginx/nginx.conf
 copy ./web/dist /nginx_master_web
 
+copy --from=builder /app-bin /nginx_master_app
 copy ./entrypoint /nginx_master_entrypoint
-copy ./nginx.conf /etc/nginx/nginx.conf
-
-run mkdir -p /nginx_logs \
-    && mkdir -p /nginx_master/servers \
-    && mkdir -p /nginx_master/certs \
-    && chmod -R 755 /nginx_master /nginx_master_web /nginx_master_app /nginx_master_entrypoint
+run chmod 755 /nginx_master_app /nginx_master_entrypoint
 
 workdir /nginx_master
 volume /nginx_master
 volume /nginx_logs
 
+expose 9999
 entrypoint ["/nginx_master_entrypoint"]
 cmd []

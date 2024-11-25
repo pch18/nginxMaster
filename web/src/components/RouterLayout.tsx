@@ -9,6 +9,7 @@ import { request } from "@/utils/request";
 import { openChangeAuthModal } from "@/common/openChangeAuthModal";
 import { version } from "@/utils/version";
 import { NginxStatus } from "./NginxStatus";
+import { useCertList, useSiteList } from "@/common/useList";
 
 export const RouterLayout: React.FC<{
   menuItems: Array<{
@@ -29,6 +30,8 @@ export const RouterLayout: React.FC<{
   }, [location]);
 
   const [isDark, setIsDark] = useDarkMode();
+  const { sortedList: siteList } = useSiteList();
+  const { sortedList: certList } = useCertList();
 
   return (
     <Layout className="h-full overflow-hidden">
@@ -60,7 +63,7 @@ export const RouterLayout: React.FC<{
 
       {/* // arco-layout-has-sider 是为了避免框架无效重渲染，导致第一次content区域渲染宽度没有减去sider, 会导致 echart 首次加载时宽度异常 */}
       <Layout className="overflow-hidden arco-layout-has-sider">
-        <Layout.Sider width={120}>
+        <Layout.Sider width={100}>
           <Menu selectedKeys={openMenu ? [openMenu.path] : []}>
             {menuItems.map((item) => (
               <Link to={item.link ?? item.path} key={item.path}>
@@ -81,9 +84,13 @@ export const RouterLayout: React.FC<{
           </div>
 
           <Layout.Footer className="border-t border-color-border-2 flex justify-between text-sm px-2">
-            <div className="flex items-center">
-              Nginx状态:
-              <NginxStatus />
+            <div className="flex items-center gap-4">
+              <div className="flex">
+                Nginx状态:
+                <NginxStatus />
+              </div>
+              <div>站点数量:{siteList.length}</div>
+              <div>证书数量:{certList.length}</div>
             </div>
             <div>
               <span>NginxMaster v{version}</span>

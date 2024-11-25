@@ -46,6 +46,8 @@ module.exports = {
     "react/prop-types": 0,
     // 禁止使用空children <Xxx></Xxx>，使用 <Xxx /> 代替
     "react/self-closing-comp": 2,
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/restrict-template-expressions": 0,
   },
   root: true,
 };

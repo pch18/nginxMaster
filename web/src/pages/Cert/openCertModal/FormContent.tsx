@@ -89,7 +89,6 @@ export const FormContext: FC<{
       const isValid = verify.verify(signature);
       if (!isValid) {
         cb("证书验证失败");
-        return;
       }
     } catch {
       cb("证书解析失败");

@@ -22,7 +22,8 @@ export default defineConfig({
 
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:9999",
+        target: "http://100.111.5.30:9999",
+        // target: "http://127.0.0.1:9999",
         changeOrigin: true,
         secure: false, // 忽略 SSL 证书验证
         configure: (proxy, options) => {

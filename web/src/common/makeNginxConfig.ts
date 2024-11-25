@@ -12,10 +12,14 @@ export const makeNginxServerConfig = (c: ServerConfig) => {
       .join(" ")};`,
   ];
   if (c.httpEn) {
-    c.httpPorts.forEach((p) => cmd.push(`listen ${p};`));
+    c.httpPorts.forEach((p) =>
+      cmd.push(`listen ${p}${c.defaultServerEn ? " default_server" : ""};`)
+    );
   }
   if (c.sslEn) {
-    c.sslPorts.forEach((p) => cmd.push(`listen ${p} ssl;`));
+    c.sslPorts.forEach((p) =>
+      cmd.push(`listen ${p} ssl${c.defaultServerEn ? " default_server" : ""};`)
+    );
     if (c.sslHttp2En) {
       cmd.push(`http2 on;`);
     }

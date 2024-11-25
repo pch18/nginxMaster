@@ -1,21 +1,33 @@
 import { request } from "@/utils/request";
 import useForm from "@arco-design/web-react/es/Form/useForm";
 import { createGlobalStore } from "hox";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { formatBytes } from "./utils";
+import { useGetState } from "ahooks";
 
 interface SearchRule {
-  host?: string[];
+  fullUrl?: string;
   method?: string;
   status?: string;
   fromIP?: string;
   ref_ua?: string;
 }
 
+const ruleFormat = (rule: SearchRule): SearchRule => {
+  return {
+    fullUrl: rule?.fullUrl?.trim().toLowerCase(),
+    method: rule?.method?.trim().toLowerCase(),
+    status: rule?.status?.trim(),
+    fromIP: rule?.fromIP?.trim(),
+    ref_ua: rule?.ref_ua?.trim().toLowerCase(),
+  };
+};
+
 const checkSearch = (rule: SearchRule, log: NginxLog) => {
-  if (rule.host?.length && !rule.host.includes(log.host.replace("*", ""))) {
+  if (rule.fullUrl && !log.fullUrl.toLowerCase().includes(rule.fullUrl)) {
     return false;
   }
-  if (rule.method && rule.method !== log.method) {
+  if (rule.method && !log.method.toLowerCase().includes(rule.method)) {
     return false;
   }
   if (rule.status && !log.status.toString().includes(rule.status)) {
@@ -30,8 +42,8 @@ const checkSearch = (rule: SearchRule, log: NginxLog) => {
   }
   if (
     rule.ref_ua &&
-    !log.referer.includes(rule.ref_ua) &&
-    !log.ua.includes(rule.ref_ua)
+    !log.referer.toLowerCase().includes(rule.ref_ua) &&
+    !log.ua.toLowerCase().includes(rule.ref_ua)
   ) {
     return false;
   }
@@ -39,33 +51,45 @@ const checkSearch = (rule: SearchRule, log: NginxLog) => {
 };
 
 export const [useNginxLog] = createGlobalStore(() => {
-  const [logs, setLogs] = useState<NginxLog[]>([]);
-  const logsRef = useRef<NginxLog[]>([]);
   const runningRef = useRef(false);
-  const [searchForm] = useForm();
+  const [searchRule, setSearchRule, getSearchRule] = useGetState<SearchRule>(
+    {}
+  );
+
+  const logsRef = useRef<NginxLog[]>([]);
+  const [logs, setLogs] = useState<NginxLog[]>([]);
+  useEffect(() => {
+    const _rules = ruleFormat(searchRule);
+    const _logs = logsRef.current.filter((log) => checkSearch(_rules, log));
+    setLogs(_logs);
+  }, [searchRule]);
 
   const run = () => {
     if (runningRef.current) {
       return;
     }
     runningRef.current = true;
-    const sse = request.nginxLogs();
+    const sse = request.nginxLogs(2000);
     sse.onmessage = (msg) => {
       const log = parseLog(msg.data);
-      logsRef.current.unshift(log);
-      if (checkSearch(searchForm.getFields(), log)) {
-        setLogs((logs) => [log, ...logs]);
+      const isReverse = log.pos.charAt(0) !== "@";
+      if (isReverse) {
+        logsRef.current.unshift(log);
+      } else {
+        logsRef.current.push(log);
+      }
+      const rule = ruleFormat(getSearchRule());
+      if (checkSearch(rule, log)) {
+        if (isReverse) {
+          setLogs((logs) => [log, ...logs]);
+        } else {
+          setLogs((logs) => [...logs, log]);
+        }
       }
     };
   };
 
-  const onSearchFormChange = (rules: SearchRule) => {
-    console.log(logsRef.current);
-    const _logs = logsRef.current.filter((log) => checkSearch(rules, log));
-    setLogs(_logs);
-  };
-
-  return { logs, run, searchForm, onSearchFormChange };
+  return { logs, run, setSearchRule, searchRule };
 });
 
 interface NginxLog {
@@ -90,67 +114,101 @@ interface NginxLog {
   xff: string;
   time: Date;
   timeStr: string;
+  fullUrl: string;
+  statusCor: string;
+  reqTimeCor: string;
+  reqLenCor: string;
+  respLenCor: string;
 }
 
 const parseLog = (raw: string): NginxLog => {
-  const [
-    pos = "",
-    method = "",
-    schema = "",
-    host = "",
-    port = "",
-    uri = "",
-    args = "",
-    protocol = "",
-    status = "",
-    reqTime = "",
-    reqLen = "",
-    respLen = "",
-    referer = "",
-    ua = "",
-    remoteAddr = "",
-    xff = "",
-    time = "",
-  ] = raw.split('"');
+  const rs = raw.split('"');
 
-  const _time = new Date(Number(time) * 1000);
-  const _reqTime = Number(reqTime) || 0;
-  const _reqLen = Number(reqLen) || 0;
-  const _respLen = Number(respLen) || 0;
+  const pos = rs[0] || "";
+  const method = !rs[1] || rs[1] === "-" ? "" : rs[1];
+  const schema = !rs[2] || rs[2] === "-" ? "" : rs[2];
+  const host = !rs[3] || rs[2] === "-" ? "" : rs[3];
+  const port = Number(rs[4]) || 0;
+  const uri = !rs[5] || rs[5] === "-" ? "" : rs[5];
+  const args = !rs[6] || rs[6] === "-" ? "" : rs[6];
+  const protocol = !rs[7] || rs[7] === "-" ? "" : rs[7];
+  const status = Number(rs[8]) || 0;
+  const statusCor =
+    status >= 200 && status < 300
+      ? "var(--color-ok)"
+      : status >= 300 && status < 400
+      ? "var(--color-warm)"
+      : "var(--color-err)";
+  const reqTime = Number(rs[9]) || 0;
+  const reqTimeStr =
+    reqTime < 1
+      ? `${(reqTime * 1000).toFixed(0)} ms`
+      : `${reqTime.toFixed(reqTime < 10 ? 2 : reqTime < 100 ? 1 : 0)} s`;
+  const reqTimeCor =
+    reqTime < 0.2
+      ? "var(--color-ok)"
+      : reqTime < 1
+      ? "var(--color-warm)"
+      : "var(--color-err)";
+  const reqLen = Number(rs[10]) || 0;
+  const reqLenStr = formatBytes(reqLen);
+  const reqLenCor =
+    reqLen < 204800
+      ? "var(--color-ok)"
+      : reqLen < 1048576
+      ? "var(--color-warm)"
+      : "var(--color-err)";
+  const respLen = Number(rs[11]) || 0;
+  const respLenStr = formatBytes(respLen);
+  const respLenCor =
+    respLen < 204800
+      ? "var(--color-ok)"
+      : respLen < 1048576
+      ? "var(--color-warm)"
+      : "var(--color-err)";
+  const referer = !rs[12] || rs[12] === "-" ? "" : rs[12];
+  const ua = !rs[13] || rs[13] === "-" ? "" : rs[13];
+  const remoteAddr = !rs[14] || rs[14] === "-" ? "" : rs[14];
+  const xff = !rs[15] || rs[15] === "-" ? "" : rs[15];
+  const time = new Date(Number(rs[16]) * 1000);
+  const timeStr = time.toLocaleString();
+
+  const urlPort =
+    schema === "http" && port === 80
+      ? ""
+      : schema === "https" && port === 443
+      ? ""
+      : port;
+  const fullUrl = `${schema || "-"}://${host || "-"}${
+    urlPort ? `:${urlPort}` : ""
+  }${uri || "/"}${args ? `?${args}` : ""}`;
 
   return {
     pos,
-    method: method === "-" ? "" : method,
-    schema: schema === "-" ? "" : schema,
-    host: host === "-" ? "" : host,
-    port: Number(port) || 0,
-    uri: uri === "-" ? "" : uri,
-    args: args === "-" ? "" : `?${args}`,
-    protocol: protocol === "-" ? "" : protocol,
-    status: Number(status) || 0,
-    reqTime: _reqTime,
-    reqTimeStr: `${_reqTime.toFixed(1)}s`,
-    reqLen: _reqLen,
-    reqLenStr: formatBytes(_reqLen),
-    respLen: _respLen,
-    respLenStr: formatBytes(_respLen),
-    referer: referer === "-" ? "" : referer,
-    ua: ua === "-" ? "" : ua,
-    remoteAddr: remoteAddr === "-" ? "" : remoteAddr,
-    xff: xff === "-" ? "" : xff,
-    time: _time,
-    timeStr: _time.toLocaleString(),
+    method,
+    schema,
+    host,
+    port,
+    uri,
+    args,
+    protocol,
+    status,
+    reqTime,
+    reqTimeStr,
+    reqLen,
+    reqLenStr,
+    respLen,
+    respLenStr,
+    referer,
+    ua,
+    remoteAddr,
+    xff,
+    time,
+    timeStr,
+    fullUrl,
+    statusCor,
+    reqTimeCor,
+    reqLenCor,
+    respLenCor,
   };
-};
-
-const formatBytes = (bytes: number) => {
-  if (bytes === 0) {
-    return "0B";
-  }
-  const k = 1024;
-  const sizes = ["B", "K", "M", "G", "T"];
-  const i = Math.min(Math.floor(Math.log(bytes) / Math.log(k)), 4);
-  const formattedBytes = (bytes / Math.pow(k, i)).toFixed(1);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return `${formattedBytes}${sizes[i]!}`;
 };

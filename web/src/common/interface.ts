@@ -37,8 +37,11 @@ export interface ServerConfig {
 
   /** 缓存静态文件 */
   staticCacheEn: boolean;
+  /** 设置为默认 Server */
+  defaultServerEn: boolean;
   /** 记录日志 */
   accessLogOff: boolean;
+
   /** 具体路由 */
   locations: LocationConfig[];
 }

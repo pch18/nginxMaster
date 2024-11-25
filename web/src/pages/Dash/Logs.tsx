@@ -4,11 +4,14 @@ import { useVirtualList } from "ahooks";
 import { type FC, useEffect, useRef } from "react";
 
 export const Logs: FC<{ className?: string }> = ({ className = "" }) => {
-  const containerRef = useRef(null);
-  const wrapperRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const { logs, run } = useNginxLog();
+  const { logs, run, searchRule } = useNginxLog();
   useEffect(run, []);
+  useEffect(() => {
+    containerRef.current!.scrollTop = 0;
+  }, [searchRule]);
 
   const [virtualLogs] = useVirtualList(logs, {
     containerTarget: containerRef,
@@ -34,16 +37,16 @@ export const Logs: FC<{ className?: string }> = ({ className = "" }) => {
       `}
     >
       <div className="h-5 flex border-l bg-[var(--color-secondary)] font-medium">
-        <div className="cell w-[147px]">时间</div>
-        <div className="cell w-[38px]">方法</div>
+        <div className="cell w-[152px]">时间</div>
+        <div className="cell w-[40px]">方法</div>
         <div className="cell !flex-[3]">地址</div>
-        <div className="cell w-[33px]">状态</div>
-        <div className="cell w-[53px]">耗时</div>
-        <div className="cell w-[60px]">收到字节</div>
-        <div className="cell w-[60px]">发送字节</div>
-        <div className="cell w-[118px]">来源IP</div>
-        <div className="cell !flex-[1]">Referer</div>
-        <div className="cell !flex-[1]">UserAgent</div>
+        <div className="cell w-[38px]">状态</div>
+        <div className="cell w-[54px]">耗时</div>
+        <div className="cell w-[68px]">收到字节</div>
+        <div className="cell w-[68px]">发送字节</div>
+        <div className="cell !flex-[1] min-w-[120px]">来源IP</div>
+        <div className="cell !flex-[1] min-w-[80px]">Referer</div>
+        <div className="cell !flex-[1]  min-w-[80px]">UserAgent</div>
       </div>
       <div
         ref={containerRef}
@@ -55,24 +58,43 @@ export const Logs: FC<{ className?: string }> = ({ className = "" }) => {
               key={data.pos}
               className="h-5 flex border-t border-l items-center"
             >
-              <div className="cell w-[147px]">{data.timeStr}</div>
-              <div className="cell w-[38px]">{data.method}POST</div>
+              <div className="cell w-[152px]">{data.timeStr}</div>
+              <div className="cell w-[40px]">{data.method}</div>
               <OverflowTooltip className="cell !flex-[3]">
-                {data.schema}://{data.host}:{data.port}
-                {data.uri}
-                {data.args}
+                {data.fullUrl}
               </OverflowTooltip>
-              <div className="cell w-[33px] text-right">{data.status}</div>
-              <div className="cell w-[53px] text-right">{data.reqTimeStr}</div>
-              <div className="cell w-[60px] text-right">{data.reqLenStr}</div>
-              <div className="cell w-[60px] text-right">{data.respLenStr}</div>
-              <div className="cell w-[118px]">
-                {data.xff || data.remoteAddr}
+              <div
+                className="cell w-[38px] text-right"
+                style={{ color: data.statusCor }}
+              >
+                {data.status}
               </div>
-              <OverflowTooltip className="cell !flex-[1]">
+              <div
+                className="cell w-[54px] text-right"
+                style={{ color: data.reqTimeCor }}
+              >
+                {data.reqTimeStr}
+              </div>
+              <div
+                className="cell w-[68px] text-right"
+                style={{ color: data.reqLenCor }}
+              >
+                {data.reqLenStr}
+              </div>
+              <div
+                className="cell w-[68px] text-right"
+                style={{ color: data.respLenCor }}
+              >
+                {data.respLenStr}
+              </div>
+              <OverflowTooltip className="cell !flex-[1] min-w-[120px]">
+                {data.remoteAddr}
+                {data.xff ? ` [${data.xff}]` : ""}
+              </OverflowTooltip>
+              <OverflowTooltip className="cell !flex-[1] min-w-[80px]">
                 {data.referer}
               </OverflowTooltip>
-              <OverflowTooltip className="cell !flex-[1]">
+              <OverflowTooltip className="cell !flex-[1] min-w-[80px]">
                 {data.ua}
               </OverflowTooltip>
             </div>

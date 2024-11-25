@@ -44,28 +44,31 @@ func NginxLogs(c *gin.Context) {
 			c.AbortWithStatus(500)
 			return
 		}
-		pos, err = pkg.ReadLinesAfterPos(c.Request.Context(), file, pos, 10000, func(l []byte, p int64) {
+		pos = pkg.ReadLinesAfterPos(c.Request.Context(), file, pos, 10000, func(l []byte, p int64) {
 			c.Writer.WriteString("id: ")
 			c.Writer.WriteString(strconv.FormatInt(p, 10))
 			c.Writer.Write([]byte{'\n'})
+
 			c.Writer.WriteString("data: ")
+			c.Writer.WriteString(strconv.FormatInt(p, 10))
+			c.Writer.Write([]byte{'"'})
 			c.Writer.Write(l)
 			c.Writer.Write([]byte{'\n'})
 			c.Writer.Write([]byte{'\n'})
 			c.Writer.Flush()
 		})
-		if err != nil {
-			c.AbortWithStatus(500)
-			return
-		}
+
 	} else {
-		lineCount := int64(200)
+		lineCount := nginxLogHistoryDefaultLines
 		lineCountStr := c.Query("n")
 		if lineCountStr != "" {
 			lineCount, err = strconv.ParseInt(lineCountStr, 10, 0)
 			if err != nil {
 				c.AbortWithStatus(500)
 				return
+			}
+			if lineCount > nginxLogHistoryMaxLines {
+				lineCount = nginxLogHistoryMaxLines
 			}
 		}
 
@@ -74,22 +77,24 @@ func NginxLogs(c *gin.Context) {
 			c.AbortWithStatus(500)
 			return
 		}
-		pos = fileInfo.Size() - 1
+		pos = pkg.SeekBackToLastLine(file, fileInfo.Size()-1)
 
-		pos, err = pkg.ReadLinesBeforePos(c.Request.Context(), file, pos, lineCount, func(l []byte, p int64) {
-			c.Writer.WriteString("id: @")
-			c.Writer.WriteString(strconv.FormatInt(pos, 10))
-			c.Writer.Write([]byte{'\n'})
+		c.Writer.WriteString("id: ")
+		c.Writer.WriteString(strconv.FormatInt(pos, 10))
+		c.Writer.Write([]byte{'\n'})
+		c.Writer.Write([]byte{'\n'})
+		c.Writer.Flush()
+
+		pkg.ReadLinesBeforePos(c.Request.Context(), file, pos, lineCount, func(l []byte, p int64) {
 			c.Writer.WriteString("data: ")
+			c.Writer.Write([]byte{'@'})
+			c.Writer.WriteString(strconv.FormatInt(p, 10))
+			c.Writer.Write([]byte{'"'})
 			c.Writer.Write(l)
 			c.Writer.Write([]byte{'\n'})
 			c.Writer.Write([]byte{'\n'})
 			c.Writer.Flush()
 		})
-		if err != nil {
-			c.AbortWithStatus(500)
-			return
-		}
 	}
 
 	defer func() {
@@ -105,19 +110,18 @@ func NginxLogs(c *gin.Context) {
 				return
 			}
 			if event.Op&fsnotify.Write == fsnotify.Write {
-				pos, err = pkg.ReadLinesAfterPos(c.Request.Context(), file, pos, 10000, func(l []byte, p int64) {
+				pos = pkg.ReadLinesAfterPos(c.Request.Context(), file, pos, 10000, func(l []byte, p int64) {
 					c.Writer.WriteString("id: ")
-					c.Writer.WriteString(strconv.FormatInt(pos, 10))
+					c.Writer.WriteString(strconv.FormatInt(p, 10))
 					c.Writer.Write([]byte{'\n'})
 					c.Writer.WriteString("data: ")
+					c.Writer.WriteString(strconv.FormatInt(p, 10))
+					c.Writer.Write([]byte{'"'})
 					c.Writer.Write(l)
 					c.Writer.Write([]byte{'\n'})
 					c.Writer.Write([]byte{'\n'})
 					c.Writer.Flush()
 				})
-				if err != nil {
-					return
-				}
 			}
 		case _, ok := <-watcher.Errors:
 			if !ok {
@@ -146,6 +150,20 @@ func NginxStart(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"err":    "NginxStart Failed",
+			"output": output,
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"output": output,
+	})
+}
+
+func NginxReload(c *gin.Context) {
+	output, err := pkg.NginxReload()
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"err":    "NginxReload Failed",
 			"output": output,
 		})
 		return

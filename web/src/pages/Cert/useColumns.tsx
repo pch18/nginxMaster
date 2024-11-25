@@ -43,15 +43,17 @@ export const useColumns = (
         <div className="flex gap-2 items-center select-none">
           <Button
             onClick={() => {
-              void openCertModal({ certConfig: s }).then(({ certConfig }) => {
-                if (certConfig) {
-                  mutate((s1) =>
-                    s1?.map((s2) => (s2.id === s.id ? certConfig : s2))
-                  );
-                } else {
-                  mutate((s1) => s1?.filter((s2) => s2.id !== s.id));
+              void openCertModal({ certConfig: s, title: "编辑证书" }).then(
+                ({ certConfig }) => {
+                  if (certConfig) {
+                    mutate((s1) =>
+                      s1?.map((s2) => (s2.id === s.id ? certConfig : s2))
+                    );
+                  } else {
+                    mutate((s1) => s1?.filter((s2) => s2.id !== s.id));
+                  }
                 }
-              });
+              );
             }}
           >
             编辑

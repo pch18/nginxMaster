@@ -1,6 +1,8 @@
 import {
   Button,
   Link,
+  Popconfirm,
+  Switch,
   Tag,
   type TableColumnProps,
 } from "@arco-design/web-react";
@@ -38,6 +40,7 @@ export const useColumns = (
               .filter((d) => d)
               .map((d, i) => (
                 <Link
+                  className="whitespace-nowrap"
                   key={i}
                   href={
                     s.sslEn
@@ -83,29 +86,33 @@ export const useColumns = (
       render(_, s: ServerConfig) {
         return (
           <div className="flex gap-2 items-center select-none">
-            <AsyncSwitch
-              checkedText="开启"
-              uncheckedText="停用"
-              className="w-14"
-              checked={s.enabled}
-              onChange={async (c) => {
-                const newS = { ...s, enabled: c };
+            <Popconfirm
+              title={`确定要${s.enabled ? "停用" : "开启"}该站点吗？`}
+              onOk={async () => {
+                const newS = { ...s, enabled: !s.enabled };
                 const res = await request.SaveSite(
                   s.id,
                   newS,
-                  c ? makeNginxServerConfig(newS) : ""
+                  newS.enabled ? makeNginxServerConfig(newS) : ""
                 );
                 actionNotification(res.err, res.output);
                 if (!res.err) {
                   mutate((s1) => s1?.map((s2) => (s2.id === s.id ? newS : s2)));
                 }
               }}
-            />
+            >
+              <Switch
+                checkedText="开启"
+                uncheckedText="停用"
+                className="w-14"
+                checked={s.enabled}
+              />
+            </Popconfirm>
 
             <Button
               type="outline"
               onClick={() => {
-                void openSiteModal({ serverConfig: s }).then(
+                void openSiteModal({ serverConfig: s, title: "编辑站点" }).then(
                   ({ serverConfig }) => {
                     if (serverConfig) {
                       mutate((s1) =>
@@ -125,6 +132,7 @@ export const useColumns = (
               onClick={() => {
                 void openSiteModal({
                   serverConfig: { ...s, id: makeId(), domains: [] },
+                  title: "克隆站点",
                 }).then(({ serverConfig }) => {
                   if (serverConfig) {
                     mutate((s) => [...(s ?? []), serverConfig]);

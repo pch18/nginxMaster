@@ -1,6 +1,10 @@
 #!/bin/sh
 
-echo "start nginx ..."
+mkdir -p /nginx_logs
+mkdir -p /nginx_master/servers
+mkdir -p /nginx_master/certs
+
+echo "Starting Nginx ..."
 nginx
 if [ $? -ne 0 ]; then
     echo "Failed to start Nginx ..."
@@ -12,6 +16,6 @@ while true; do
     echo "Starting NginxMaster ..."
     /nginx_master_app
     EXIT_CODE=$?
-    echo "NginxMaster exited with code $EXIT_CODE, restarting in 1 second..."
+    echo "NginxMaster exited with code $EXIT_CODE, Restarting in 1 second..."
     sleep 1
 done
