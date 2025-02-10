@@ -69,7 +69,7 @@ export const [useNginxLog] = createGlobalStore(() => {
       return;
     }
     runningRef.current = true;
-    const sse = request.nginxLogs(2000);
+    const sse = request.nginxLogs(10000);
     sse.onmessage = (msg) => {
       const log = parseLog(msg.data);
       const isReverse = log.pos.charAt(0) !== "@";

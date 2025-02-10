@@ -9,7 +9,11 @@ export const LogsTitle: FC<{ className?: string }> = ({ className = "" }) => {
   return (
     <>
       <div className="flex-none font-bold text-lg mb-2">
-        实时日志 ({logs.length})
+        实时日志
+        <span className="font-mono">({logs.length})</span>
+        <span className="font-mono text-gray-400 text-sm ml-2">
+          {logs[logs.length - 1]?.timeStr}~
+        </span>
       </div>
       <Form
         form={form}
