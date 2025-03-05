@@ -95,7 +95,7 @@ export const RouterLayout: React.FC<{
             <div>
               <span>NginxMaster v{version}</span>
               <span className="ml-6">
-                Provided By{" "}
+                Developed By{" "}
                 <a
                   href="https://pch18.cn/archives/529.html"
                   className="underline"
