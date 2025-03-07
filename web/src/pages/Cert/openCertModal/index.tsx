@@ -49,7 +49,25 @@ export const openCertModal = createNiceModal<
           <AsyncButton
             type="primary"
             onClick={async () => {
-              await formIns.validate();
+              try {
+                await formIns.validate();
+              } catch (e) {
+                const errKeys = Object.keys((e as any).errors);
+                if (
+                  errKeys.some((key) => key !== "keyRaw" && key !== "pemRaw")
+                ) {
+                  throw e;
+                }
+                await new Promise((resolve, reject) =>
+                  Modal.confirm({
+                    title: "证书校验失败，是否强行提交？",
+                    okText: "强行提交，后果自负",
+                    cancelText: "我再确认一下",
+                    onOk: resolve,
+                    onCancel: reject,
+                  })
+                );
+              }
               const newCertConfig = formIns.getFields() as CertConfig;
               newCertConfig.updateAt = Date.now();
 
