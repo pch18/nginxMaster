@@ -30,7 +30,7 @@ export default function () {
         className="!w-[60vw]  min-w-[320px] max-w-[640px]  bg-color-border-2 shadow-lg p-10"
       >
         <div className="text-4xl mx-auto pb-12">
-          <div>NginxMaster</div>
+          <div>Trace ID 日志查询</div>
           <div className="text-base text-left">
             <span>v{version}</span>
             <span className="float-right">

@@ -1,116 +1,118 @@
-export interface ServerConfig {
-  /** TimeId */
+import type dayjs from "dayjs";
+
+export interface EasTrace {
   id: string;
-  /** 是否启用 */
-  enabled: boolean;
-  /** 备注 */
-  remark: string;
-  /** nginx 额外配置，加入在 location 之前 */
-  nginxRaw: string;
-  /** 创建时间 */
-  createdAt: number;
-  /** 修改时间 */
-  updateAt: number;
-
-  /** 站点域名 */
-  domains: string[];
-
-  /** 开启 httpEn */
-  httpEn: boolean;
-  /** http 的监听端口 */
-  httpPorts: number[];
-
-  /** 开启 ssl */
-  sslEn: boolean;
-  /** ssl 的监听端口 */
-  sslPorts: number[];
-  /** 使用哪个证书 */
-  sslCertId: string;
-  /** 证书 Pem Path */
-  sslCertPem: string;
-  /** 证书 Key Path */
-  sslCertKey: string;
-  /** 开启 http2 */
-  sslHttp2En: boolean;
-  /** 开启 http 跳转 https */
-  sslForceEn: boolean;
-
-  /** 缓存静态文件 */
-  staticCacheEn: boolean;
-  /** 设置为默认 Server */
-  defaultServerEn: boolean;
-  /** 记录日志 */
-  accessLogOff: boolean;
-
-  /** 具体路由 */
-  locations: LocationConfig[];
+  createdat: string;
+  proclist: string;
+  prockey: string;
+  userid: string;
 }
 
-export interface LocationConfig {
-  /** TimeId */
-  id: string;
-  /** 路由路径 */
-  path: string;
-  /** nginx 额外配置，加在最后 */
-  nginxRaw: string;
+export interface EasLog {
+  num: number;
+  traceid: string;
+  trace: EasTrace;
 
-  /** 路由类型 */
-  mode: LocationMode;
-
-  proxy_target: string;
-  proxy_wsEn: boolean;
-  proxy_host: string;
-
-  static_root: string;
-  static_indexEn: boolean;
-  static_index: string;
-  static_spaEn: boolean;
-  static_spa: string;
-
-  redirect_target: string;
-  redirect_code: LocationRedirectCode;
-  redirect_takeUri: boolean;
+  app: string;
+  srv: string;
+  kind: EasLogKind;
+  level: EasLogLevel;
+  stack: string[];
+  time: dayjs.Dayjs;
+  logs: EasLog_Common;
 }
 
-export enum LocationRedirectCode {
-  Code301 = "301",
-  Code302 = "302",
-  Code307 = "307",
-  Code308 = "308",
+export enum EasLogLevel {
+  Debug = "Debug",
+  Info = "Info",
+  Warn = "Warn",
+  Error = "Error",
+  Fatal = "Fatal",
+  Panic = "Panic",
 }
 
-export enum LocationMode {
-  Proxy = "proxy",
-  Static = "static",
-  Redirect = "redirect",
-  Custom = "custom",
+export enum EasLogKind {
+  Default = "Default",
+  GrpcClient = "Grpc-Client",
+  GrpcServer = "Grpc-Server",
+  Gin = "Gin",
+  Gorm = "Gorm",
+  Mongo = "Mongo",
+  Amq = "Amq",
+  Rmq = "Rmq",
 }
 
-export interface CertConfig {
-  id: string;
-  type: CertType;
-  /** 创建时间 */
-  createdAt: number;
-  /** 修改时间 */
-  updateAt: number;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface EasLog_Common {}
 
-  /** 自定义的名称 */
+export interface EasLog_Default extends EasLog_Common {
+  msg: string;
+}
+
+export interface EasLog_GrpcClient extends EasLog_Common {
   name: string;
-  /** 适用域名 */
-  domain: string;
-  /** 颁发者 */
-  issuer: string;
-  /** 生效时间 */
-  effectAt: number;
-  /** 过期时间 */
-  expiredAt: number;
+  call: string;
 
-  pemRaw: string;
-  keyRaw: string;
-  pemPath: string;
-  keyPath: string;
+  // 以下是请求才有的
+  startKey?: string;
+  req?: any;
+
+  // 以下是返回才有的
+  endKey?: string;
+  elapsed?: number;
+  error?: string;
+  resp?: any;
 }
 
-export enum CertType {
-  Custom = "custom",
+export interface EasLog_GrpcServer extends EasLog_Common {
+  name: string;
+  call: string;
+  from: string;
+
+  // 以下是请求才有的
+  startKey?: string;
+  req?: any;
+
+  // 以下是返回才有的
+  endKey?: string;
+  elapsed?: number;
+  error?: string;
+  resp?: any;
+}
+
+export interface EasLog_Gin extends EasLog_Common {
+  name: string;
+  method: string;
+  path: string;
+  from: string;
+
+  // 以下是请求才有的
+  startKey?: string;
+  header?: Record<string, string>;
+  req?: any;
+
+  // 以下是返回才有的
+  endKey?: string;
+  status?: number;
+  elapsed?: number;
+  errors?: string[];
+}
+
+export interface EasLog_Gorm extends EasLog_Common {
+  sql: string;
+  rows: number;
+  duration: number;
+  error: string;
+}
+
+export interface EasLog_Mongo extends EasLog_Common {
+  msg: string;
+}
+
+export interface EasLog_Amq extends EasLog_Common {
+  msg: string;
+}
+
+export interface EasLog_Rmq extends EasLog_Common {
+  msg: string;
 }
