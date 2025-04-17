@@ -1,3 +1,14 @@
+import {
+  IconBug,
+  IconCloseCircle,
+  IconCloseCircleFill,
+  IconExclamationCircle,
+  IconFaceFrownFill,
+  IconMinusCircle,
+  IconMinusCircleFill,
+  IconPoweroff,
+  IconThumbDownFill,
+} from "@arco-design/web-react/icon";
 import type dayjs from "dayjs";
 
 export interface EasTrace {
@@ -9,6 +20,7 @@ export interface EasTrace {
 }
 
 export interface EasLog {
+  _id: string;
   num: number;
   traceid: string;
   trace: EasTrace;
@@ -18,7 +30,7 @@ export interface EasLog {
   kind: EasLogKind;
   level: EasLogLevel;
   stack: string[];
-  time: dayjs.Dayjs;
+  time: number;
   logs: EasLog_Common;
 }
 
@@ -30,6 +42,24 @@ export enum EasLogLevel {
   Fatal = "Fatal",
   Panic = "Panic",
 }
+
+export const EasLogLevelIconMap = {
+  [EasLogLevel.Debug]: <IconBug className="text-xl" />,
+  [EasLogLevel.Info]: <IconExclamationCircle className="text-xl" />,
+  [EasLogLevel.Warn]: <IconMinusCircleFill className="text-xl" />,
+  [EasLogLevel.Error]: <IconCloseCircleFill className="text-xl" />,
+  [EasLogLevel.Fatal]: <IconThumbDownFill className="text-xl" />,
+  [EasLogLevel.Panic]: <IconFaceFrownFill className="text-xl" />,
+};
+
+export const EasLogLevelColorMap = {
+  [EasLogLevel.Debug]: "#7EB712",
+  [EasLogLevel.Info]: "#1FA6AA",
+  [EasLogLevel.Warn]: "#FF7D00",
+  [EasLogLevel.Error]: "#F53F3F",
+  [EasLogLevel.Fatal]: "#3491FA",
+  [EasLogLevel.Panic]: "#8E51DA",
+};
 
 export enum EasLogKind {
   Default = "Default",

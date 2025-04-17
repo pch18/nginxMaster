@@ -1,8 +1,6 @@
 export const logsData = [
   {
-    _id: {
-      $oid: "67ea1145a54f4ce4ef92d84b",
-    },
+    _id: "67ea1145a54f4ce4ef92d84b",
     num: 139273,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -31,9 +29,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbaf",
-    },
+    _id: "67ea113a1776e68fb19bfbaf",
     num: 212887,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -45,7 +41,7 @@ export const logsData = [
     },
     srv: "ota-1",
     kind: "Gin",
-    level: "Info",
+    level: "Debug",
     stack: [
       "easbnb-service/pkg/easlog/main.go:151 [easbnb-service/pkg/easlog.write]",
       "easbnb-service/pkg/easlog/gin_middleware.go:31 [easbnb-service/app/inner_ota/internal/controller.Run.GinMiddleware.func4]",
@@ -158,9 +154,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbb0",
-    },
+    _id: "67ea113a1776e68fb19bfbb0",
     num: 212888,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -172,7 +166,7 @@ export const logsData = [
     },
     srv: "ota-1",
     kind: "Default",
-    level: "Info",
+    level: "Warn",
     stack: [
       "easbnb-service/app/inner_ota/internal/controller/airbnb.go:78 [easbnb-service/app/inner_ota/internal/controller.AirbnbPost]",
       "github.com/gin-gonic/gin@v1.9.1/context.go:174 [github.com/gin-gonic/gin.(*Context).Next]",
@@ -198,9 +192,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbb1",
-    },
+    _id: "67ea113a1776e68fb19bfbb1",
     num: 212889,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -212,7 +204,7 @@ export const logsData = [
     },
     srv: "ota-1",
     kind: "Default",
-    level: "Info",
+    level: "Error",
     stack: [
       "easbnb-service/app/inner_ota/internal/controller/airbnb.go:88 [easbnb-service/app/inner_ota/internal/controller.AirbnbPost]",
       "github.com/gin-gonic/gin@v1.9.1/context.go:174 [github.com/gin-gonic/gin.(*Context).Next]",
@@ -238,9 +230,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbb2",
-    },
+    _id: "67ea113a1776e68fb19bfbb2",
     num: 212890,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -252,7 +242,7 @@ export const logsData = [
     },
     srv: "ota-1",
     kind: "Gorm",
-    level: "Info",
+    level: "Fatal",
     stack: [
       "easbnb-service/app/inner_ota/internal/db/dao/room_link.go:34 [easbnb-service/app/inner_ota/internal/db/dao.(*RoomLink).ListByOutRoomIds]",
       "easbnb-service/app/inner_ota/internal/controller/airbnb.go:438 [easbnb-service/app/inner_ota/internal/controller.ReservationAcceptanceConfirmation]",
@@ -283,9 +273,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbb3",
-    },
+    _id: "67ea113a1776e68fb19bfbb3",
     num: 212891,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -297,7 +285,7 @@ export const logsData = [
     },
     srv: "ota-1",
     kind: "Gorm",
-    level: "Info",
+    level: "Panic",
     stack: [
       "easbnb-service/app/inner_ota/internal/db/dao/room_link.go:34 [easbnb-service/app/inner_ota/internal/db/dao.(*RoomLink).ListByOutRoomIds]",
       "easbnb-service/app/inner_ota/internal/service/room_day.go:45 [easbnb-service/app/inner_ota/internal/service.RoomDay.CheckAvailable]",
@@ -329,9 +317,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbb4",
-    },
+    _id: "67ea113a1776e68fb19bfbb4",
     num: 212892,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -381,9 +367,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbb5",
-    },
+    _id: "67ea113a1776e68fb19bfbb5",
     num: 212893,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -431,9 +415,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbb6",
-    },
+    _id: "67ea113a1776e68fb19bfbb6",
     num: 212894,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -476,9 +458,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbb7",
-    },
+    _id: "67ea113a1776e68fb19bfbb7",
     num: 212895,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -526,9 +506,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbb8",
-    },
+    _id: "67ea113a1776e68fb19bfbb8",
     num: 212896,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -592,9 +570,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbb9",
-    },
+    _id: "67ea113a1776e68fb19bfbb9",
     num: 212897,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -638,9 +614,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbba",
-    },
+    _id: "67ea113a1776e68fb19bfbba",
     num: 212898,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -733,9 +707,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbbc",
-    },
+    _id: "67ea113a1776e68fb19bfbbc",
     num: 212900,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -763,9 +735,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbbd",
-    },
+    _id: "67ea113a1776e68fb19bfbbd",
     num: 212901,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -794,9 +764,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbbe",
-    },
+    _id: "67ea113a1776e68fb19bfbbe",
     num: 212902,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -825,9 +793,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbbf",
-    },
+    _id: "67ea113a1776e68fb19bfbbf",
     num: 212903,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -866,9 +832,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbc0",
-    },
+    _id: "67ea113a1776e68fb19bfbc0",
     num: 212904,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -909,9 +873,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbc1",
-    },
+    _id: "67ea113a1776e68fb19bfbc1",
     num: 212905,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -941,9 +903,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbc2",
-    },
+    _id: "67ea113a1776e68fb19bfbc2",
     num: 212906,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1036,9 +996,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbc3",
-    },
+    _id: "67ea113a1776e68fb19bfbc3",
     num: 212907,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1068,9 +1026,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbc4",
-    },
+    _id: "67ea113a1776e68fb19bfbc4",
     num: 212908,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1105,9 +1061,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbc6",
-    },
+    _id: "67ea113a1776e68fb19bfbc6",
     num: 212910,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1154,9 +1108,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbc7",
-    },
+    _id: "67ea113a1776e68fb19bfbc7",
     num: 212911,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1196,9 +1148,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbc8",
-    },
+    _id: "67ea113a1776e68fb19bfbc8",
     num: 212912,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1247,9 +1197,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbc9",
-    },
+    _id: "67ea113a1776e68fb19bfbc9",
     num: 212913,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1298,9 +1246,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbca",
-    },
+    _id: "67ea113a1776e68fb19bfbca",
     num: 212914,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1375,9 +1321,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbcb",
-    },
+    _id: "67ea113a1776e68fb19bfbcb",
     num: 212915,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1457,9 +1401,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbcc",
-    },
+    _id: "67ea113a1776e68fb19bfbcc",
     num: 212916,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1501,9 +1443,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbcf",
-    },
+    _id: "67ea113a1776e68fb19bfbcf",
     num: 212919,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1533,9 +1473,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbd0",
-    },
+    _id: "67ea113a1776e68fb19bfbd0",
     num: 212920,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1565,9 +1503,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbd1",
-    },
+    _id: "67ea113a1776e68fb19bfbd1",
     num: 212921,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1602,9 +1538,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbd4",
-    },
+    _id: "67ea113a1776e68fb19bfbd4",
     num: 212924,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1634,9 +1568,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbd5",
-    },
+    _id: "67ea113a1776e68fb19bfbd5",
     num: 212925,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1666,9 +1598,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbd6",
-    },
+    _id: "67ea113a1776e68fb19bfbd6",
     num: 212926,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1703,9 +1633,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbd9",
-    },
+    _id: "67ea113a1776e68fb19bfbd9",
     num: 212929,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1735,9 +1663,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbda",
-    },
+    _id: "67ea113a1776e68fb19bfbda",
     num: 212930,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1767,9 +1693,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbdb",
-    },
+    _id: "67ea113a1776e68fb19bfbdb",
     num: 212931,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1804,9 +1728,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbde",
-    },
+    _id: "67ea113a1776e68fb19bfbde",
     num: 212934,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1836,9 +1758,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbdf",
-    },
+    _id: "67ea113a1776e68fb19bfbdf",
     num: 212935,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1868,9 +1788,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbe0",
-    },
+    _id: "67ea113a1776e68fb19bfbe0",
     num: 212936,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1905,9 +1823,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbe3",
-    },
+    _id: "67ea113a1776e68fb19bfbe3",
     num: 212939,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1937,9 +1853,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbe4",
-    },
+    _id: "67ea113a1776e68fb19bfbe4",
     num: 212940,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -1969,9 +1883,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbe5",
-    },
+    _id: "67ea113a1776e68fb19bfbe5",
     num: 212941,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2006,9 +1918,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbe8",
-    },
+    _id: "67ea113a1776e68fb19bfbe8",
     num: 212944,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2038,9 +1948,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbe9",
-    },
+    _id: "67ea113a1776e68fb19bfbe9",
     num: 212945,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2070,9 +1978,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbea",
-    },
+    _id: "67ea113a1776e68fb19bfbea",
     num: 212946,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2107,9 +2013,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbed",
-    },
+    _id: "67ea113a1776e68fb19bfbed",
     num: 212949,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2139,9 +2043,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbee",
-    },
+    _id: "67ea113a1776e68fb19bfbee",
     num: 212950,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2171,9 +2073,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbef",
-    },
+    _id: "67ea113a1776e68fb19bfbef",
     num: 212951,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2208,9 +2108,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbf2",
-    },
+    _id: "67ea113a1776e68fb19bfbf2",
     num: 212954,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2240,9 +2138,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113a1776e68fb19bfbf3",
-    },
+    _id: "67ea113a1776e68fb19bfbf3",
     num: 212955,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2272,9 +2168,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775d8",
-    },
+    _id: "67ea113d4d706fb5395775d8",
     num: 58241,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2307,9 +2201,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775d9",
-    },
+    _id: "67ea113d4d706fb5395775d9",
     num: 58242,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2345,9 +2237,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775da",
-    },
+    _id: "67ea113d4d706fb5395775da",
     num: 58243,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2382,9 +2272,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775db",
-    },
+    _id: "67ea113d4d706fb5395775db",
     num: 58244,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2417,9 +2305,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775dc",
-    },
+    _id: "67ea113d4d706fb5395775dc",
     num: 58245,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2455,9 +2341,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775dd",
-    },
+    _id: "67ea113d4d706fb5395775dd",
     num: 58246,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2492,9 +2376,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775de",
-    },
+    _id: "67ea113d4d706fb5395775de",
     num: 58247,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2527,9 +2409,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775df",
-    },
+    _id: "67ea113d4d706fb5395775df",
     num: 58248,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2565,9 +2445,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775e0",
-    },
+    _id: "67ea113d4d706fb5395775e0",
     num: 58249,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2603,9 +2481,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775e1",
-    },
+    _id: "67ea113d4d706fb5395775e1",
     num: 58250,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2640,9 +2516,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775e2",
-    },
+    _id: "67ea113d4d706fb5395775e2",
     num: 58251,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2676,9 +2550,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775e3",
-    },
+    _id: "67ea113d4d706fb5395775e3",
     num: 58252,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2715,9 +2587,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea113d4d706fb5395775e4",
-    },
+    _id: "67ea113d4d706fb5395775e4",
     num: 58253,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2753,9 +2623,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1144f294dfaf5c2d074d",
-    },
+    _id: "67ea1144f294dfaf5c2d074",
     num: 140476,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2788,9 +2656,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1144f294dfaf5c2d074d",
-    },
+    _id: "67ea1144f294dfaf5c2d074d",
     num: 140476,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2824,9 +2690,7 @@ export const logsData = [
   },
 
   {
-    _id: {
-      $oid: "67ea1145a54f4ce4ef92d84c",
-    },
+    _id: "67ea1145a54f4ce4ef92d84c",
     num: 139274,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2855,9 +2719,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1145a54f4ce4ef92d84d",
-    },
+    _id: "67ea1145a54f4ce4ef92d84d",
     num: 139275,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2887,9 +2749,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1145a54f4ce4ef92d84e",
-    },
+    _id: "67ea1145a54f4ce4ef92d84e",
     num: 139276,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2919,9 +2779,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1145a54f4ce4ef92d84f",
-    },
+    _id: "67ea1145a54f4ce4ef92d84f",
     num: 139277,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2951,9 +2809,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1145a54f4ce4ef92d850",
-    },
+    _id: "67ea1145a54f4ce4ef92d850",
     num: 139278,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -2985,9 +2841,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11459a01d1ef5462860a",
-    },
+    _id: "67ea11459a01d1ef5462860a",
     num: 139840,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3017,9 +2871,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1146ffb36d51eafbaa44",
-    },
+    _id: "67ea1146ffb36d51eafbaa44",
     num: 140687,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3048,9 +2900,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1146ffb36d51eafbaa45",
-    },
+    _id: "67ea1146ffb36d51eafbaa45",
     num: 140688,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3079,9 +2929,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1146ffb36d51eafbaa46",
-    },
+    _id: "67ea1146ffb36d51eafbaa46",
     num: 140689,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3142,9 +2990,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1146ffb36d51eafbaa47",
-    },
+    _id: "67ea1146ffb36d51eafbaa47",
     num: 140690,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3205,9 +3051,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1154cd5ef64b0e4f73ad",
-    },
+    _id: "67ea1154cd5ef64b0e4f73ad",
     num: 29549,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3240,9 +3084,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1154cd5ef64b0e4f73ae",
-    },
+    _id: "67ea1154cd5ef64b0e4f73ae",
     num: 29550,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3278,9 +3120,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1154cd5ef64b0e4f73af",
-    },
+    _id: "67ea1154cd5ef64b0e4f73af",
     num: 29551,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3316,9 +3156,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1154cd5ef64b0e4f73b0",
-    },
+    _id: "67ea1154cd5ef64b0e4f73b0",
     num: 29552,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3354,9 +3192,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1154cd5ef64b0e4f73b1",
-    },
+    _id: "67ea1154cd5ef64b0e4f73b1",
     num: 29553,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3393,9 +3229,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1154cd5ef64b0e4f73b2",
-    },
+    _id: "67ea1154cd5ef64b0e4f73b2",
     num: 29554,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3432,9 +3266,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea1154cd5ef64b0e4f73b3",
-    },
+    _id: "67ea1154cd5ef64b0e4f73b3",
     num: 29555,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3469,9 +3301,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea116c58c6d3edbcc6652b",
-    },
+    _id: "67ea116c58c6d3edbcc6652b",
     num: 85183,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3504,9 +3334,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea116c58c6d3edbcc6652c",
-    },
+    _id: "67ea116c58c6d3edbcc6652c",
     num: 85184,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3541,9 +3369,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea116c58c6d3edbcc6652d",
-    },
+    _id: "67ea116c58c6d3edbcc6652d",
     num: 85185,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3576,9 +3402,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea116c58c6d3edbcc6652e",
-    },
+    _id: "67ea116c58c6d3edbcc6652e",
     num: 85186,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3613,9 +3437,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11705923d7fe0c724c8f",
-    },
+    _id: "67ea11705923d7fe0c724c8f",
     num: 37631,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3648,9 +3470,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11705923d7fe0c724c90",
-    },
+    _id: "67ea11705923d7fe0c724c90",
     num: 37632,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3686,9 +3506,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11705923d7fe0c724c91",
-    },
+    _id: "67ea11705923d7fe0c724c91",
     num: 37633,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3725,9 +3543,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11705923d7fe0c724c92",
-    },
+    _id: "67ea11705923d7fe0c724c92",
     num: 37634,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3763,9 +3579,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11705923d7fe0c724c93",
-    },
+    _id: "67ea11705923d7fe0c724c93",
     num: 37635,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3802,9 +3616,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11705923d7fe0c724c94",
-    },
+    _id: "67ea11705923d7fe0c724c94",
     num: 37636,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3840,9 +3652,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11705923d7fe0c724c95",
-    },
+    _id: "67ea11705923d7fe0c724c95",
     num: 37637,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3890,9 +3700,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11705923d7fe0c724c96",
-    },
+    _id: "67ea11705923d7fe0c724c96",
     num: 37638,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3941,9 +3749,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11705923d7fe0c724c97",
-    },
+    _id: "67ea11705923d7fe0c724c97",
     num: 37639,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -3978,9 +3784,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11701776e68fb19bfbf7",
-    },
+    _id: "67ea11701776e68fb19bfbf7",
     num: 212956,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -4015,9 +3819,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11701776e68fb19bfbfa",
-    },
+    _id: "67ea11701776e68fb19bfbfa",
     num: 212959,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -4047,9 +3849,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11701776e68fb19bfbfb",
-    },
+    _id: "67ea11701776e68fb19bfbfb",
     num: 212960,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -4079,9 +3879,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11701776e68fb19bfbfc",
-    },
+    _id: "67ea11701776e68fb19bfbfc",
     num: 212961,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -4116,9 +3914,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11701776e68fb19bfbff",
-    },
+    _id: "67ea11701776e68fb19bfbff",
     num: 212964,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -4148,9 +3944,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11701776e68fb19bfc00",
-    },
+    _id: "67ea11701776e68fb19bfc00",
     num: 212965,
     traceid: "ep03cry122vgsqb4",
     trace: {
@@ -4180,9 +3974,7 @@ export const logsData = [
     },
   },
   {
-    _id: {
-      $oid: "67ea11701776e68fb19bfc01",
-    },
+    _id: "67ea11701776e68fb19bfc01",
     num: 212966,
     traceid: "ep03cry122vgsqb4",
     trace: {

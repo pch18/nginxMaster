@@ -51,7 +51,10 @@ export default function () {
         className="font-mono flex-1"
         css={`
           .arco-tabs-content {
-            overflow-y: auto;
+            overflow: auto;
+          }
+          .arco-tabs-content-item {
+            overflow: visible;
           }
         `}
       >
