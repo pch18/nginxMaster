@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Login(c *gin.Context) {
+func GetSys(c *gin.Context) {
 	var requestBody map[string]interface{}
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -34,9 +34,4 @@ func Login(c *gin.Context) {
 
 	pkg.SignCookie(c, hashAuth)
 	c.JSON(http.StatusOK, gin.H{})
-}
-
-func Logout(c *gin.Context) {
-	pkg.SignCookie(c, "")
-	c.AbortWithStatus(401)
 }

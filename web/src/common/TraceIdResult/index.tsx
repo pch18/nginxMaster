@@ -2,16 +2,11 @@ import { useMemo, useState, type FC } from "react";
 import { GraphProc } from "./GraphProc";
 import { useRequest } from "ahooks";
 import { logsData } from "./logsData";
-import {
-  EasLogLevelColorMap,
-  EasLogLevelIconMap,
-  type EasLog,
-} from "../interface";
-import ReactJson from "react-json-view";
-import { useDarkMode } from "../useDarkMode";
+import { type EasLogLevel, type EasLog } from "../interface";
 import dayjs from "dayjs";
 import { calcProc } from "./utils";
-import { Collapse } from "@arco-design/web-react";
+import { CollapseLog } from "./CollapseLog";
+import { ToolBar } from "./ToolBar";
 
 export const TraceIdResult: FC<{ traceId: string; className?: string }> = ({
   traceId,
@@ -40,8 +35,6 @@ export const TraceIdResult: FC<{ traceId: string; className?: string }> = ({
 };
 
 const Content: FC<{ logs: EasLog[] }> = ({ logs }) => {
-  const [isDark] = useDarkMode();
-
   const [select, setSelect] = useState<Set<string>>(new Set());
   const handleSelect = (key: string | undefined) => {
     setSelect((s) => {
@@ -82,48 +75,26 @@ const Content: FC<{ logs: EasLog[] }> = ({ logs }) => {
     }
   }, [logs, select]);
 
+  const [filterLevels, setFilterLevels] = useState<EasLogLevel[]>([]);
+
   return (
     <>
-      <GraphProc
-        procList={procList}
-        select={select}
-        handleSelect={handleSelect}
-        className="sticky top-0 bg-[var(--color-bg-1)] z-10"
-      />
+      <div className="sticky top-0 bg-color-bg-1 z-10">
+        <GraphProc
+          procList={procList}
+          select={select}
+          handleSelect={handleSelect}
+        />
+        <div className="border-t mb-1" />
+        <ToolBar
+          className="py-2"
+          logs={curLogs}
+          filterLevels={filterLevels}
+          setFilterLevels={setFilterLevels}
+        />
+      </div>
 
-      <Collapse className="select-text">
-        {curLogs.map((log) => (
-          <Collapse.Item
-            key={log._id.toString()}
-            name={log._id.toString()}
-            header={
-              <>
-                <span
-                  className="inline-flex items-center"
-                  style={{ color: EasLogLevelColorMap[log.level] }}
-                >
-                  [{EasLogLevelIconMap[log.level]}
-                  {log.level}]
-                </span>
-                <span className="ml-1">
-                  {log.srv} / {log.kind} :
-                </span>
-              </>
-            }
-            extra={
-              <div className="text-xs text-color-text-3">
-                {dayjs(log.time).format("YYYY/MM/DD HH:mm:ss")}
-              </div>
-            }
-          >
-            <ReactJson
-              src={log}
-              displayDataTypes={false}
-              theme={isDark ? "monokai" : "rjv-default"}
-            />
-          </Collapse.Item>
-        ))}
-      </Collapse>
+      <CollapseLog logs={curLogs} filterLevels={filterLevels} />
     </>
   );
 };

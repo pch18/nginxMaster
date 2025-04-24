@@ -10,10 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// admin:admin9999
-const initUserPass = "YWRtaW46YWRtaW45OTk5"
+// admin:admin7777
+const initUserPass = "YWRtaW46YWRtaW43Nzc3"
 const cookieName = "_x_"
-const cookieExpire = 7200
+const cookieExpire = 3600
 
 var AuthHashKey []byte
 var CurAuthWithHash string
@@ -22,10 +22,10 @@ func init() {
 	timestamp := time.Now().UnixNano()
 	AuthHashKey = []byte(strconv.FormatInt(timestamp, 36))
 
-	_userPass, err := os.ReadFile(AuthFile)
-	if err == nil {
-		CurAuthWithHash = HashAuthByte(_userPass)
-	} else if os.IsNotExist((err)) {
+	_userPass := os.Getenv("USER_PASS")
+	if _userPass != "" {
+		CurAuthWithHash = HashAuth(_userPass)
+	} else {
 		CurAuthWithHash = HashAuth(initUserPass)
 	}
 }

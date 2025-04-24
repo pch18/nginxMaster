@@ -43,7 +43,7 @@ const Node: FC<{
     <div className="flex gap-2">
       {list.map((s) => (
         <div key={s.key} style={{ flex: s.width || 1 }} className="min-w-0">
-          <Popover
+          {/* <Popover
             // popupHoverStay={false}
             triggerProps={{
               alignPoint: true,
@@ -52,30 +52,34 @@ const Node: FC<{
             }}
             content={
               <div>
-                <div className="font-bold">{s.srv}</div>
+                <div className="font-bold">
+                  {s.app} / {s.srv}
+                </div>
                 <div>{s.name}</div>
               </div>
             }
+          > */}
+          <div
+            className={clsx(
+              "px-1 mb-2 hover:opacity-80 cursor-pointer relative",
+              {
+                "opacity-25": select.size && !select.has(s.key),
+              }
+            )}
+            style={{ backgroundColor: getColor(s.srvInd, isDark) }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSelect(s.key);
+            }}
           >
-            <div
-              className={clsx(
-                "px-1 mb-2 hover:opacity-80 cursor-pointer relative",
-                {
-                  "opacity-25": select.size && !select.has(s.key),
-                }
-              )}
-              style={{ backgroundColor: getColor(s.srvInd, isDark) }}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSelect(s.key);
-              }}
-            >
-              <div className="h-0 w-fit absolute right-0 top-0">
-                <Badge count={s.logs.length} />
-              </div>
-              <div className="truncate font-bold">{s.srv}</div>
+            <div className="h-0 w-fit absolute right-0 top-0">
+              <Badge count={s.logs.length} />
             </div>
-          </Popover>
+            <div className="truncate text-center">
+              {s.srv}/{s.name}
+            </div>
+          </div>
+          {/* </Popover> */}
           <Node
             procList={procList}
             parentKey={s.key}

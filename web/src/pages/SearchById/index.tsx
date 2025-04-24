@@ -9,13 +9,10 @@ export default function () {
   const [tabs, setTabs] = useState<string[]>(["8z0gon02bo7javo7"]);
 
   const [activeTab, setActiveTab] = useState("8z0gon02bo7javo7");
+  const [refreshKey, setRefreshKey] = useState<Record<string, number>>({});
 
   const handleSearch = () => {
     if (!checkTrace(traceId)) {
-      Message.error({
-        content: "Trace ID 格式错误",
-        duration: 800,
-      });
       return;
     }
     setTabs((_t) => {
@@ -25,7 +22,7 @@ export default function () {
       return _t;
     });
     setActiveTab(traceId);
-    setTraceId("");
+    setRefreshKey((_k) => ({ ..._k, [traceId]: (_k[traceId] || 0) + 1 }));
   };
 
   return (
@@ -38,22 +35,31 @@ export default function () {
           onChange={setTraceId}
           placeholder="请输入要查询的 Trace ID"
           onPressEnter={handleSearch}
+          onFocus={(e) => {
+            e.target.selectionStart = 0;
+            e.target.selectionEnd = e.target.value.length;
+          }}
         />
-        <Button className="!h-12 !px-7 !text-xl " onClick={handleSearch}>
-          搜索
+        <Button
+          className="!h-12 !px-7 !text-xl "
+          onClick={handleSearch}
+          disabled={!checkTrace(traceId)}
+        >
+          {tabs.includes(traceId) ? "刷新" : "搜索"}
         </Button>
       </div>
 
       <Tabs
         activeTab={activeTab}
         onChange={setActiveTab}
+        onClickTab={setTraceId}
         tabPosition="left"
         className="font-mono flex-1"
         css={`
           .arco-tabs-content {
             overflow: auto;
           }
-          .arco-tabs-content-item {
+          .arco-tabs-content-item-active {
             overflow: visible;
           }
         `}
@@ -61,9 +67,9 @@ export default function () {
         {tabs.map((tab) => (
           <Tabs.TabPane
             key={tab}
-            title={<div className="w-[68px] break-words text-wrap">{tab}</div>}
+            title={<div className="w-[68px] text-wrap break-all">{tab}</div>}
           >
-            <TraceIdResult traceId={tab} />
+            <TraceIdResult traceId={tab} key={refreshKey[tab]} />
           </Tabs.TabPane>
         ))}
       </Tabs>

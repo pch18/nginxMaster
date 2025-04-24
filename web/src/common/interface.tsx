@@ -27,11 +27,12 @@ export interface EasLog {
 
   app: string;
   srv: string;
-  kind: EasLogKind;
   level: EasLogLevel;
   stack: string[];
   time: number;
-  logs: EasLog_Common;
+
+  kind: EasLogKind;
+  data: EasLog_Common;
 }
 
 export enum EasLogLevel {
@@ -44,12 +45,12 @@ export enum EasLogLevel {
 }
 
 export const EasLogLevelIconMap = {
-  [EasLogLevel.Debug]: <IconBug className="text-xl" />,
-  [EasLogLevel.Info]: <IconExclamationCircle className="text-xl" />,
-  [EasLogLevel.Warn]: <IconMinusCircleFill className="text-xl" />,
-  [EasLogLevel.Error]: <IconCloseCircleFill className="text-xl" />,
-  [EasLogLevel.Fatal]: <IconThumbDownFill className="text-xl" />,
-  [EasLogLevel.Panic]: <IconFaceFrownFill className="text-xl" />,
+  [EasLogLevel.Debug]: IconBug,
+  [EasLogLevel.Info]: IconExclamationCircle,
+  [EasLogLevel.Warn]: IconMinusCircleFill,
+  [EasLogLevel.Error]: IconCloseCircleFill,
+  [EasLogLevel.Fatal]: IconThumbDownFill,
+  [EasLogLevel.Panic]: IconFaceFrownFill,
 };
 
 export const EasLogLevelColorMap = {
@@ -71,6 +72,17 @@ export enum EasLogKind {
   Amq = "Amq",
   Rmq = "Rmq",
 }
+
+export const EasLogKindColorMap = {
+  [EasLogKind.Default]: "#86909c",
+  [EasLogKind.GrpcClient]: "#0fc6c2",
+  [EasLogKind.GrpcServer]: "#168cff",
+  [EasLogKind.Gin]: "#eb0aa4",
+  [EasLogKind.Gorm]: "#7816ff",
+  [EasLogKind.Mongo]: "#8E51DA",
+  [EasLogKind.Amq]: "#8E51DA",
+  [EasLogKind.Rmq]: "#8E51DA",
+};
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface EasLog_Common {}
@@ -126,6 +138,7 @@ export interface EasLog_Gin extends EasLog_Common {
   status?: number;
   elapsed?: number;
   errors?: string[];
+  resp?: any;
 }
 
 export interface EasLog_Gorm extends EasLog_Common {
@@ -136,13 +149,13 @@ export interface EasLog_Gorm extends EasLog_Common {
 }
 
 export interface EasLog_Mongo extends EasLog_Common {
-  msg: string;
+  // msg: string;
 }
 
 export interface EasLog_Amq extends EasLog_Common {
-  msg: string;
+  // msg: string;
 }
 
 export interface EasLog_Rmq extends EasLog_Common {
-  msg: string;
+  // msg: string;
 }

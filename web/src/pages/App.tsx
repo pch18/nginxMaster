@@ -11,8 +11,8 @@ import {
   IconLock,
 } from "@arco-design/web-react/icon";
 import SearchById from "./SearchById";
-import Search from "./Search";
 import Alarm from "./Alarm";
+import SearchByConds from "./SearchByConds";
 
 const router = createBrowserRouter([
   {
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/search",
-        element: <Search />,
+        element: <SearchByConds />,
       },
       {
         path: "/alarm",
