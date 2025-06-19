@@ -13,6 +13,8 @@ import (
 func main() {
 
 	router := gin.Default()
+	router.ContextWithFallback = true
+
 	router.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	router.Use(func(c *gin.Context) {
