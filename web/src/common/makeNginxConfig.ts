@@ -46,6 +46,21 @@ export const makeNginxServerConfig = (c: ServerConfig) => {
     cmd.push(`access_log  off;`);
   }
 
+  if (c.staticCacheEn) {
+    cmd.push("");
+    cmd.push(`set $cache_flag 0;`);
+
+    cmd.push(`if ($request_method = GET) {`);
+    cmd.push(`\t set $cache_flag "\${cache_flag}1";`);
+    cmd.push(`}`);
+
+    cmd.push(
+      `if ($uri ~* \\.(cur|css|js|eot|ttf|otf|woff|woff2|jpg|jpeg|png|gif|ico|svg|webp|tiff|avif|bmp|mp3|wav|ogg|mp4|avi|mov|mkv|webm|pdf|doc|docx|xls|xlsx|ppt|pptx|zip|rar|tar|gz|7z|svgz|htm|html|shtml|flv|wma|wmv|exe|txt|tat|swf|apk|ts|ejs|m3u8|wasm)$) {`
+    );
+    cmd.push(`\t set $cache_flag "\${cache_flag}1";`);
+    cmd.push(`}`);
+  }
+
   if (c.nginxRaw.trim()) {
     cmd.push("");
     c.nginxRaw.split("\n").forEach((r) => cmd.push(r));
@@ -79,6 +94,11 @@ export const makeNginxLocationConfig = (
     }
     if (c.static_spaEn && c.static_spa) {
       cmd.push(`try_files $uri ${c.static_spa};`);
+      if (cs.staticCacheEn) {
+        cmd.push(`if ($uri = "${c.static_spa}") {`);
+        cmd.push(`\tset $cache_flag "\${cache_flag}0";`);
+        cmd.push(`}`);
+      }
     }
   } else if (c.mode === LocationMode.Proxy) {
     cmd.push(`proxy_pass ${c.proxy_target};`);
@@ -108,19 +128,6 @@ export const makeNginxLocationConfig = (
 
   if (c.mode !== LocationMode.Custom && cs.staticCacheEn) {
     cmd.push("");
-
-    cmd.push(`set $cache_flag 0;`);
-
-    cmd.push(`if ($request_method = GET) {`);
-    cmd.push(`\t set $cache_flag "\${cache_flag}1";`);
-    cmd.push(`}`);
-
-    cmd.push(
-      `if ($uri ~* \\.(css|js|eot|ttf|otf|woff|woff2|jpg|jpeg|png|gif|ico|svg|webp|tiff|avif|bmp|mp3|wav|ogg|mp4|avi|mov|mkv|webm|pdf|doc|docx|xls|xlsx|ppt|pptx|zip|rar|tar|gz|7z|svgz|htm|html|shtml|flv|wma|wmv|exe|txt|tat|swf|apk|ts|ejs|m3u8)$) {`
-    );
-    cmd.push(`\t set $cache_flag "\${cache_flag}1";`);
-    cmd.push(`}`);
-
     cmd.push(`if ($cache_flag = "011") {`);
     cmd.push(`\texpires 30d;`);
     cmd.push(`\tadd_header Cache-Control "public, no-transform";`);
