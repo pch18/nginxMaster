@@ -25,3 +25,5 @@ dist-ssr
 *.sw?
 __debug_*
 /cfg
+/web/.history
+/.history

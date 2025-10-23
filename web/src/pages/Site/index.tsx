@@ -50,6 +50,7 @@ export default function () {
         data={filteredList}
         loading={loading || Boolean(error)}
         rowKey="id"
+        scroll={{ x: "max-content" }}
         pagination={false}
       />
     </div>
