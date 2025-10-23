@@ -83,6 +83,7 @@ export const useColumns = (
       title: "操作",
       width: 150,
       dataIndex: "cmd",
+      fixed: "right",
       render(_, s: ServerConfig) {
         return (
           <div className="flex gap-2 items-center select-none">
