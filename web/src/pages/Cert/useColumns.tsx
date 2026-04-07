@@ -31,7 +31,7 @@ export const useColumns = (
     dataIndex: "expiredAt",
     width: 150,
     render(col: number) {
-      return dayjs(col).format("YYYY-MM-DD");
+      return dayjs.unix(col).format("YYYY-MM-DD");
     },
   },
   {

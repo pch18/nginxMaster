@@ -12,7 +12,7 @@ export const CertTitle: FC<{
       <div className="h-7 whitespace-nowrap">
         {certConfig.name}
         <Tag className="ml-2" size="small" color="green">
-          剩{dayjs(certConfig.expiredAt).diff(dayjs(), "d")}天
+          剩{dayjs.unix(certConfig.expiredAt).diff(dayjs(), "d")}天
         </Tag>
       </div>
       <div className="whitespace-nowrap">

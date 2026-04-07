@@ -25,6 +25,7 @@ docker run -d --name nginx-master -p 9999:9999 -p 443:443 -p 80:80 --restart alw
 ## 构建发布
 ```
 cd web
+pnpm i
 pnpm build
 cd ..
 docker buildx create --use

@@ -9,11 +9,16 @@ import {
   Select,
 } from "@arco-design/web-react";
 import { IconUpload } from "@arco-design/web-react/icon";
-import * as jsrsasign from "jsrsasign";
 import { type FC } from "react";
-import { certTimeToStamp } from "./utils";
 import dayjs from "dayjs";
 import { fileUpload } from "@/utils/fileUpload";
+import {
+  parseCert,
+  parseCerts,
+  parseMainCert,
+  splitCerts,
+  validateMainCert,
+} from "@/utils/parseCert";
 
 export const FormContext: FC<{
   formIns: FormInstance;
@@ -32,27 +37,16 @@ export const FormContext: FC<{
     pemRaw: string | undefined,
     cb
   ) => {
-    if (
-      !pemRaw?.includes("-----BEGIN CERTIFICATE-----") ||
-      !pemRaw?.includes("-----END CERTIFICATE-----")
-    ) {
-      clearCertInfo();
-      cb("无效的证书格式");
-      return;
-    }
     try {
-      const x509 = new jsrsasign.X509();
-      x509.readCertPEM(pemRaw);
-      const subjectCN = x509.getSubjectString(); // 获取主题信息
-      const issuerCN = x509.getIssuerString(); // 获取颁发者信息
-      const notBefore = x509.getNotBefore(); // 获取证书生效时间
-      const notAfter = x509.getNotAfter(); // 获取证书到期时间
-
+      const res = parseMainCert(pemRaw || "");
       formIns.setFieldsValue({
-        domain: subjectCN.match(/\/CN=([^/]+)/)?.[1] ?? subjectCN,
-        issuer: issuerCN.match(/\/CN=([^/]+)/)?.[1] ?? issuerCN,
-        effectAt: certTimeToStamp(notBefore),
-        expiredAt: certTimeToStamp(notAfter),
+        domain:
+          res.sanDomains?.join(", ") ??
+          res.subject.match(/\/CN=([^/]+)/)?.[1] ??
+          "",
+        issuer: res.issuer,
+        effectAt: res.notBefore,
+        expiredAt: res.notAfter,
       });
     } catch {
       clearCertInfo();
@@ -63,32 +57,11 @@ export const FormContext: FC<{
     keyRaw: string | undefined,
     cb
   ) => {
-    if (
-      !keyRaw?.includes("-----BEGIN PRIVATE KEY-----") ||
-      !keyRaw?.includes("-----END PRIVATE KEY-----")
-    ) {
-      cb("无效的证书格式");
-      return;
-    }
     try {
-      const testData = "TEST";
       const pemRaw: string = formIns.getFieldValue("pemRaw");
-
-      // 使用私钥对数据进行签名
-      const sig = new jsrsasign.KJUR.crypto.Signature({ alg: "SHA256withRSA" });
-      sig.init(keyRaw);
-      sig.updateString(testData);
-      const signature = sig.sign();
-
-      // 使用公钥验证签名
-      const verify = new jsrsasign.KJUR.crypto.Signature({
-        alg: "SHA256withRSA",
-      });
-      verify.init(pemRaw);
-      verify.updateString(testData);
-      const isValid = verify.verify(signature);
-      if (!isValid) {
-        cb("证书验证失败");
+      const res = validateMainCert(pemRaw, keyRaw || "");
+      if (!res) {
+        cb("公钥和私钥不匹配");
       }
     } catch {
       cb("证书解析失败");
@@ -128,7 +101,7 @@ export const FormContext: FC<{
           field="effectAt"
           label="生效时间"
           formatter={(t) =>
-            t >= 0 ? dayjs(t).format("YYYY-MM-DD HH:mm:ss") : ""
+            t >= 0 ? dayjs.unix(t).format("YYYY-MM-DD HH:mm:ss") : ""
           }
         >
           <Input readOnly placeholder="填写证书后自动生成" />
@@ -137,7 +110,7 @@ export const FormContext: FC<{
           field="expiredAt"
           label="过期时间"
           formatter={(t) =>
-            t >= 0 ? dayjs(t).format("YYYY-MM-DD HH:mm:ss") : ""
+            t >= 0 ? dayjs.unix(t).format("YYYY-MM-DD HH:mm:ss") : ""
           }
         >
           <Input readOnly placeholder="填写证书后自动生成" />
