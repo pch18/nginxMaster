@@ -1,37 +1,41 @@
 package main
 
 import (
+	"embed"
+	"io/fs"
+	"net/http"
 	"nginx_master/ctl"
 	"nginx_master/pkg"
-	"os"
-	"path/filepath"
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 )
 
+//go:embed web/*
+var webEmbedFs embed.FS
+
 func main() {
 
 	router := gin.Default()
-	router.ContextWithFallback = true
 
 	router.Use(gzip.Gzip(gzip.DefaultCompression))
 
+	webFs, err := fs.Sub(webEmbedFs, "web")
+	if err != nil {
+		panic(err)
+	}
+	webHttpFs := http.FileServer(http.FS(webFs))
+
 	router.Use(func(c *gin.Context) {
-		if len(c.Request.URL.Path) >= 4 && c.Request.URL.Path[:4] == "/api" {
+		if len(c.Request.URL.Path) >= 5 && c.Request.URL.Path[:5] == "/api/" {
 			c.Next()
 			return
 		}
 
-		path := filepath.Join(pkg.WebDir, filepath.Clean(c.Request.URL.Path))
-		if _, err := filepath.Rel(pkg.WebDir, path); err == nil {
-			if _, err := os.Stat(path); err == nil {
-				c.File(path)
-				return
-			}
+		if _, err := webFs.Open(c.Request.URL.Path[1:]); err != nil {
+			c.Request.URL.Path = "/"
 		}
-
-		c.File(pkg.WebDir + "/index.html")
+		webHttpFs.ServeHTTP(c.Writer, c.Request)
 	})
 
 	router.POST("/api/v1/login", ctl.Login)

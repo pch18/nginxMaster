@@ -40,10 +40,7 @@ export const FormContext: FC<{
     try {
       const res = parseMainCert(pemRaw || "");
       formIns.setFieldsValue({
-        domain:
-          res.sanDomains?.join(", ") ??
-          res.subject.match(/\/CN=([^/]+)/)?.[1] ??
-          "",
+        domain: res.sanDomains?.join(", ") ?? res.subject ?? "",
         issuer: res.issuer,
         effectAt: res.notBefore,
         expiredAt: res.notAfter,

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && rm -rf ../srv/web/* && cp -r ./dist/* ../srv/web/",
     "preview": "vite preview"
   },
   "dependencies": {

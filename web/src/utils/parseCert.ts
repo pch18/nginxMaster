@@ -42,6 +42,10 @@ export const parseCert = (certPem: string) => {
   };
 };
 
+export const pickCN = (str: string) => {
+  return str.match(/CN=([^,]+)/)?.[1] || str;
+};
+
 export const validateCert = (pub: string, pvt: string) => {
   try {
     const testData = "TEST";

@@ -12,10 +12,8 @@ from nginx:stable-alpine-perl
 
 env TZ=Asia/Shanghai
 
-copy ./nginx.conf /etc/nginx/nginx.conf
-copy ./web/dist /nginx_master_web
-
 copy --from=builder /app-bin /nginx_master_app
+copy ./nginx.conf /etc/nginx/nginx.conf
 copy ./entrypoint /nginx_master_entrypoint
 run chmod 755 /nginx_master_app /nginx_master_entrypoint
 

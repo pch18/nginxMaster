@@ -3,6 +3,7 @@ import { LocationMode, type LocationConfig } from "./interface";
 import { Tag } from "@arco-design/web-react";
 import { ConstMapLocationMode } from "./const";
 import clsx from "clsx";
+import { OverflowTooltip } from "@/components/OverflowTooltip";
 
 export const LocationTitle: FC<{
   location: LocationConfig;
@@ -29,7 +30,7 @@ export const LocationTitle: FC<{
   return (
     <div className={clsx(className, "overflow-hidden flex gap-1 items-center")}>
       <Tag size="small" bordered>
-        {location.path}
+        <OverflowTooltip className="max-w-64">{location.path}</OverflowTooltip>
       </Tag>
 
       <Tag
@@ -37,7 +38,7 @@ export const LocationTitle: FC<{
         bordered
         color={ConstMapLocationMode[location.mode].color}
       >
-        {paramText}
+        <OverflowTooltip className="max-w-64">{paramText}</OverflowTooltip>
       </Tag>
     </div>
   );

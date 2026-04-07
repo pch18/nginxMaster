@@ -2,6 +2,8 @@ import { Button, type TableColumnProps } from "@arco-design/web-react";
 import { type CertConfig } from "@/common/interface";
 import { openCertModal } from "./openCertModal";
 import dayjs from "dayjs";
+import { CertExpireTag } from "@/common/CertTitle";
+import { pickCN } from "@/utils/parseCert";
 
 export const useColumns = (
   mutate: (fn: (s?: CertConfig[]) => CertConfig[] | undefined) => void
@@ -12,31 +14,44 @@ export const useColumns = (
     width: 125,
   },
   {
-    title: "类型",
-    dataIndex: "type",
+    title: "名称",
+    dataIndex: "name",
     width: 100,
   },
   {
-    title: "名称",
-    dataIndex: "name",
-    width: 200,
+    title: "类型",
+    dataIndex: "type",
+    width: 50,
   },
   {
     title: "域名",
     dataIndex: "domain",
-    width: 200,
+    width: 150,
+  },
+  {
+    title: "颁发者",
+    dataIndex: "issuer",
+    width: 150,
+    render(col: string) {
+      return pickCN(col);
+    },
   },
   {
     title: "有效期至",
     dataIndex: "expiredAt",
     width: 150,
     render(col: number) {
-      return dayjs.unix(col).format("YYYY-MM-DD");
+      return (
+        <div>
+          <span>{dayjs.unix(col).format("YYYY-MM-DD")}</span>
+          <CertExpireTag className="ml-2" expiredAt={col} />
+        </div>
+      );
     },
   },
   {
     title: "操作",
-    width: 150,
+    width: 100,
     dataIndex: "cmd",
     render(_, s: CertConfig) {
       return (
