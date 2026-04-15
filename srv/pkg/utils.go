@@ -4,9 +4,15 @@ import (
 	"context"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 func WriteFile(path string, content []byte) error {
+	err := os.MkdirAll(filepath.Dir(path), 0o644)
+	if err != nil {
+		return err
+	}
+
 	file, err := os.Create(path)
 	if err != nil {
 		return err

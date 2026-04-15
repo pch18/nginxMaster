@@ -23,13 +23,13 @@ func NginxLogs(c *gin.Context) {
 	}
 	defer watcher.Close()
 
-	err = watcher.Add(pkg.NginxLogFile)
+	err = watcher.Add(pkg.NginxAccessLogFile)
 	if err != nil {
 		c.AbortWithStatus(500)
 		return
 	}
 
-	file, err := os.Open(pkg.NginxLogFile)
+	file, err := os.Open(pkg.NginxAccessLogFile)
 	if err != nil {
 		c.AbortWithStatus(500)
 		return

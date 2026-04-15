@@ -8,11 +8,15 @@ import (
 )
 
 func ListServer() (list []map[string]any, err error) {
+	if err = os.MkdirAll(ServerConfigDir, 0o644); err != nil {
+		return nil, fmt.Errorf("failed to create [ServerConfig] directory: %v", err)
+	}
+
 	list = []map[string]any{}
 	// 读取目录下的所有文件
 	files, err := os.ReadDir(ServerConfigDir)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read [ServerConfig] directory: %v", err)
 	}
 
 	for _, file := range files {

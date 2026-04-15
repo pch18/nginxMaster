@@ -13,14 +13,22 @@ import (
 
 func NginxReload() (string, error) {
 	// 创建一个 exec.Command 来执行 nginx -s reload 命令
-	cmd := exec.Command(NginxBin, "-s", "reload")
-
+	cmd := exec.Command(NginxBin, "-s", "reload", "-c", NginxConfFile)
 	// 使用 CombinedOutput 方法来运行命令，并获取输出和错误信息
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return string(output), fmt.Errorf("failed to reload nginx: %w", err)
 	}
 
+	return string(output), nil
+}
+
+func NginxStart() (string, error) {
+	cmd := exec.Command(NginxBin, "-c", NginxConfFile)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return string(output), fmt.Errorf("failed to start nginx: %w", err)
+	}
 	return string(output), nil
 }
 
@@ -106,13 +114,4 @@ func NginxStatus() (bool, error) {
 
 	err = fmt.Errorf("failed to Signal pid[%d]: %w", pid, err)
 	return false, err
-}
-
-func NginxStart() (string, error) {
-	cmd := exec.Command(NginxBin)
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return string(output), fmt.Errorf("failed to start nginx: %w", err)
-	}
-	return string(output), nil
 }

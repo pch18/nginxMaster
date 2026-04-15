@@ -2,10 +2,12 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"io/fs"
 	"net/http"
 	"nginx_master/ctl"
 	"nginx_master/pkg"
+	"os"
 	"strings"
 
 	"github.com/gin-contrib/gzip"
@@ -18,10 +20,54 @@ var webEmbedFs embed.FS
 //go:embed nginx.conf
 var nginxConf []byte
 
-func main() {
-	nginxConf = []byte(strings.ReplaceAll(string(nginxConf), "/@nginx_master_dir@", pkg.CfgBase))
-	pkg.WriteFile(pkg.NginxConfFile, nginxConf)
+func getNginxUser() string {
+	content, err := os.ReadFile("/etc/os-release")
+	if err != nil {
+		return "nginx"
+	}
 
+	osRelease := strings.ToLower(string(content))
+	if strings.Contains(osRelease, "id=ubuntu") ||
+		strings.Contains(osRelease, "id=debian") ||
+		strings.Contains(osRelease, "id_like=ubuntu") ||
+		strings.Contains(osRelease, "id_like=debian") {
+		return "www-data"
+	}
+
+	return "nginx"
+}
+
+func init() {
+	var err error
+
+	if err = os.MkdirAll(pkg.CfgBase, 0o644); err != nil {
+		panic(fmt.Sprintf("failed to create [ %s ] directory: %v", pkg.CfgBase, err))
+	}
+
+	nginxConf = []byte(strings.NewReplacer(
+		"@NginxUser@", getNginxUser(),
+		"@NginxPidFile@", pkg.NginxPidFile,
+		"@NginxErrorLogFile@", pkg.NginxErrorLogFile,
+		"@NginxAccessLogFile@", pkg.NginxAccessLogFile,
+		"@NginxConfigDir@", pkg.NginxConfigDir,
+	).Replace(string(nginxConf)))
+
+	err = pkg.WriteFile(pkg.NginxConfFile, nginxConf)
+	if err != nil {
+		panic(fmt.Sprintf("failed to write nginx config: %v", err))
+	}
+
+	fmt.Println("write nginx config success, path: " + pkg.NginxConfFile)
+
+	out, err := pkg.NginxStart()
+	if err != nil {
+		fmt.Printf("failed to start nginx: %v, output: %s \n", err, out)
+	} else {
+		fmt.Printf("nginx started successfully, output: %s \n", out)
+	}
+}
+
+func main() {
 	router := gin.Default()
 
 	router.Use(gzip.Gzip(gzip.DefaultCompression))

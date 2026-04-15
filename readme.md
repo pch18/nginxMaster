@@ -22,11 +22,13 @@ docker run -d --name nginx-master -p 9999:9999 -p 443:443 -p 80:80 --restart alw
 ```
 支持多架构，amd64, arm64 等，如果缺了某个架构的构建，请提 issue
 
-## 裸机安装
+## 裸机安装命令（前提安装完nginx）
 ```
-先安装nginx
-然后直接运行bin文件
+curl -fsSL https://raw.githubusercontent.com/pch18/nginxMaster/refs/heads/main/install.debian | sudo bash
+
+wget -qO- https://raw.githubusercontent.com/pch18/nginxMaster/refs/heads/main/install.debian | sudo bash
 ```
+
 
 ## 构建发布
 ```
@@ -36,4 +38,12 @@ pnpm build
 cd ..
 docker buildx create --use
 docker buildx build --platform=linux/amd64,linux/arm64 -t pch18/nginx-master . --push
+```
+
+## 构建多平台bin
+```
+cd srv
+rm -f build/*
+GOOS=linux GOARCH=amd64 go build -o build/app-linux-amd64 main.go
+GOOS=linux GOARCH=arm64 go build -o build/app-linux-arm64 main.go
 ```

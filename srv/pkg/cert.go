@@ -8,11 +8,15 @@ import (
 )
 
 func ListCert() (list []map[string]any, err error) {
+	if err = os.MkdirAll(CertDir, 0o644); err != nil {
+		panic(fmt.Sprintf("failed to create [Cert] directory: %v", err))
+	}
+
 	list = []map[string]any{}
 	// 读取目录下的所有文件
 	files, err := os.ReadDir(CertDir)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read [Cert] directory: %v", err)
 	}
 
 	for _, file := range files {
