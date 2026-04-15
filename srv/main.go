@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"nginx_master/ctl"
 	"nginx_master/pkg"
+	"strings"
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
@@ -14,7 +15,12 @@ import (
 //go:embed web/*
 var webEmbedFs embed.FS
 
+//go:embed nginx.conf
+var nginxConf []byte
+
 func main() {
+	nginxConf = []byte(strings.ReplaceAll(string(nginxConf), "/@nginx_master_dir@", pkg.CfgBase))
+	pkg.WriteFile(pkg.NginxConfFile, nginxConf)
 
 	router := gin.Default()
 

@@ -4,23 +4,20 @@ from golang:alpine3.20 as builder
 workdir /srv
 
 copy ./srv /srv
-run go build -o /app-bin .
+run go build -o /nginx_master .
 
 # 构建镜像
 # from nginx:stable-alpine
 from nginx:stable-alpine-perl
 
 env TZ=Asia/Shanghai
+env CFG_BASE=/nginx_master_data
 
-copy --from=builder /app-bin /nginx_master_app
-copy ./nginx.conf /etc/nginx/nginx.conf
-copy ./entrypoint /nginx_master_entrypoint
-run chmod 755 /nginx_master_app /nginx_master_entrypoint
+copy --chmod=755 --from=builder /nginx_master /nginx_master
+copy --chmod=755 ./entrypoint /entrypoint
 
-workdir /nginx_master
-volume /nginx_master
-volume /nginx_logs
+volume /nginx_master_data
 
 expose 9999
-entrypoint ["/nginx_master_entrypoint"]
+entrypoint ["/entrypoint"]
 cmd []

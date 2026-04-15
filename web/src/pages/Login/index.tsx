@@ -1,6 +1,6 @@
 import { AsyncButton } from "@/components/AsyncButton";
 import { request } from "@/utils/request";
-import { version } from "@/utils/version";
+import { version } from "@/version";
 import { Form, Input, Message } from "@arco-design/web-react";
 import useForm from "@arco-design/web-react/es/Form/useForm";
 import { useRef } from "react";

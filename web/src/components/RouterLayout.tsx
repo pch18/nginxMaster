@@ -7,7 +7,7 @@ import { useDarkMode } from "@/common/useDarkMode";
 import { AsyncButton } from "./AsyncButton";
 import { request } from "@/utils/request";
 import { openChangeAuthModal } from "@/common/openChangeAuthModal";
-import { version } from "@/utils/version";
+import { version } from "@/version";
 import { NginxStatus } from "./NginxStatus";
 import { useCertList, useSiteList } from "@/common/useList";
 

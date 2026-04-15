@@ -32,7 +32,7 @@ func NginxVerify(config string) (string, error) {
 	}
 	defer nginxTempFile.Close() // 确保函数结束时删除临时文件
 
-	nginxRootFile, err := os.Open(NginxRootFile)
+	nginxRootFile, err := os.Open(NginxConfFile)
 	if err != nil {
 		return "", fmt.Errorf("failed to open nginxRootFile: %w", err)
 	}

@@ -1,9 +1,5 @@
 #!/bin/sh
 
-mkdir -p /nginx_logs
-mkdir -p /nginx_master/servers
-mkdir -p /nginx_master/certs
-
 echo "Starting Nginx ..."
 nginx
 if [ $? -ne 0 ]; then
